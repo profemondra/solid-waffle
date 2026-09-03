@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Sprites en Acción! · Taller de Refuerzo · Curso F Lecciones 3 y 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#241b3a; --paper:#fffdf5;
+  --purple:#7c4dff; --pink:#ff5da2; --yellow:#ffc93c; --teal:#2ed3b7;
+  --blue:#4d96ff; --orange:#ff8c42; --green:#4fc24f; --red:#ff5c5c;
+  --cw:min(5.2vw,34px); --ws:min(7vw,38px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;color:var(--ink);
+  background:#f6f2ff;
+  background-image:radial-gradient(#e3d9ff 2px, transparent 2px);
+  background-size:26px 26px;
+}
+h1,h2,h3,.display{font-family:'Fredoka',sans-serif}
+button{font-family:'Nunito',sans-serif;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;overflow:hidden;color:#fff;text-align:center;
+  background:linear-gradient(135deg,#5b2be0 0%,#7c4dff 45%,#4d96ff 100%);
+  padding:56px 16px 70px;border-bottom:5px solid var(--ink);
+}
+.hero .badge{
+  display:inline-block;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.6);
+  padding:6px 16px;border-radius:99px;font-weight:800;font-size:.85rem;letter-spacing:.5px;margin-bottom:18px
+}
+.hero h1{font-size:clamp(2.3rem,7vw,4.2rem);line-height:1.05;text-shadow:4px 4px 0 rgba(0,0,0,.25)}
+.hero h1 span{color:var(--yellow)}
+.hero p.sub{max-width:640px;margin:14px auto 22px;font-size:clamp(1rem,2.6vw,1.2rem);font-weight:700}
+.hero .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:26px}
+.chip{background:#fff;color:var(--ink);font-weight:900;font-size:.85rem;padding:7px 14px;border-radius:99px;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.chip.star{background:var(--yellow)}
+.btn{
+  display:inline-block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;
+  background:var(--yellow);color:var(--ink);border:3px solid var(--ink);border-radius:16px;
+  padding:12px 26px;box-shadow:5px 5px 0 var(--ink);text-decoration:none;transition:transform .1s, box-shadow .1s;
+}
+.btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+.btn.pink{background:var(--pink);color:#fff}
+.btn.teal{background:var(--teal)}
+.btn.blue{background:var(--blue);color:#fff}
+.btn.small{font-size:.9rem;padding:9px 16px;border-radius:12px}
+.floater{position:absolute;font-size:2.2rem;opacity:.85;animation:float 5s ease-in-out infinite;pointer-events:none;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.2))}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-22px) rotate(8deg)}}
+
+/* ============ NAV ============ */
+nav{
+  position:sticky;top:0;z-index:50;background:#fff;border-bottom:4px solid var(--ink);
+  display:flex;gap:8px;overflow-x:auto;padding:10px 14px;-webkit-overflow-scrolling:touch;
+}
+nav a{
+  flex:0 0 auto;text-decoration:none;color:var(--ink);font-weight:900;font-size:.86rem;
+  padding:8px 14px;border-radius:99px;border:3px solid var(--ink);background:#fff;white-space:nowrap;
+}
+nav a:hover{background:var(--yellow)}
+nav a.hot{background:var(--pink);color:#fff}
+
+/* ============ SECTIONS ============ */
+section{padding:52px 0}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.sec-num{
+  font-family:'Fredoka',sans-serif;font-weight:700;font-size:1rem;background:var(--ink);color:#fff;
+  padding:8px 14px;border-radius:12px;box-shadow:3px 3px 0 rgba(0,0,0,.2)
+}
+.sec-head h2{font-size:clamp(1.6rem,4.5vw,2.3rem)}
+.squiggle{display:block;margin:2px 0 22px}
+.lead{font-size:1.05rem;font-weight:600;max-width:820px;margin-bottom:24px}
+.reveal{opacity:0;transform:translateY(24px);transition:all .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+.card{
+  background:#fff;border:3px solid var(--ink);border-radius:20px;padding:22px;
+  box-shadow:6px 6px 0 var(--ink);
+}
+.grid{display:grid;gap:18px}
+.g5{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+
+.concept .ico{font-size:2.4rem;display:block;margin-bottom:8px}
+.concept h3{font-size:1.25rem;margin-bottom:6px}
+.concept p{font-size:.95rem;font-weight:600}
+.concept .ej{display:block;margin-top:10px;font-size:.82rem;font-weight:800;background:#f3efff;border:2px dashed var(--purple);border-radius:10px;padding:8px}
+.c-purple{border-top:10px solid var(--purple)} .c-pink{border-top:10px solid var(--pink)}
+.c-yellow{border-top:10px solid var(--yellow)} .c-teal{border-top:10px solid var(--teal)}
+.c-blue{border-top:10px solid var(--blue)} .c-orange{border-top:10px solid var(--orange)}
+
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:22px 0}
+.flow .step{flex:1;min-width:150px;text-align:center;font-weight:800;padding:14px;border:3px solid var(--ink);border-radius:16px;background:#fff;box-shadow:4px 4px 0 var(--ink)}
+.flow .arrow{align-self:center;font-size:1.6rem}
+.tipbox{background:#fff6d8;border:3px solid var(--ink);border-left:12px solid var(--yellow);border-radius:14px;padding:16px;font-weight:700;margin-top:20px}
+
+/* ============ BLOQUES ============ */
+.bcat{padding:18px}
+.bcat h3{margin-bottom:12px;font-size:1.1rem}
+.block{
+  display:inline-block;font-weight:900;font-size:.8rem;color:#fff;padding:7px 12px;border-radius:10px;
+  border:2px solid rgba(0,0,0,.35);box-shadow:0 3px 0 rgba(0,0,0,.35);margin:4px 4px 4px 0;
+}
+.block.w{background:var(--orange)} .block.s{background:var(--purple)} .block.l{background:var(--blue)}
+.block.b{background:var(--green)} .block.e{background:#f5a300}
+.block.mini{background:#8bd450;font-size:.72rem}
+
+/* ============ LAB / SIMULADOR ============ */
+.lab-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:20px}
+@media(max-width:820px){.lab-grid{grid-template-columns:1fr}}
+#stage{
+  position:relative;width:100%;aspect-ratio:1/1;border:4px solid var(--ink);border-radius:18px;overflow:hidden;
+  background:#fdfdff;user-select:none;
+}
+#stage.bg-grid{background-image:linear-gradient(#e8e4ff 1px,transparent 1px),linear-gradient(90deg,#e8e4ff 1px,transparent 1px);background-size:10% 10%}
+#stage.bg-space{background:linear-gradient(180deg,#141034,#3b2a7a)}
+#stage.bg-forest{background:linear-gradient(180deg,#bfeaff 0%,#bfeaff 62%,#6ec96e 62%,#3f9e3f 100%)}
+#spriteWrap{position:absolute;width:0;height:0;z-index:5}
+#spriteInner{font-size:52px;line-height:1;cursor:pointer;display:block;transform:translate(-50%,-50%);filter:drop-shadow(2px 3px 0 rgba(0,0,0,.25))}
+#bubble{
+  position:absolute;transform:translate(-50%,-130%);background:#fff;border:3px solid var(--ink);border-radius:14px;
+  padding:6px 12px;font-weight:900;white-space:nowrap;opacity:0;transition:opacity .2s;z-index:6;
+}
+#bubble.show{opacity:1}
+.panel h3{font-size:1rem;margin:14px 0 8px}
+.panel h3:first-child{margin-top:0}
+.bbtn{
+  border:3px solid var(--ink);border-radius:12px;font-weight:900;font-size:.8rem;padding:8px 10px;margin:4px 4px 4px 0;
+  box-shadow:3px 3px 0 var(--ink);background:#fff;transition:transform .08s;
+}
+.bbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.bbtn.start{background:#d9f7d0}.bbtn.stop{background:#ffe1e1}.bbtn.sel{outline:3px solid var(--purple)}
+#activeB{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+#activeB li{background:var(--green);color:#fff;font-weight:900;font-size:.8rem;padding:6px 12px;border-radius:99px;border:2px solid var(--ink);cursor:pointer}
+#activeB li:hover{background:var(--red)}
+#log{background:#241b3a;color:#9ef0d0;font-family:monospace;font-size:.8rem;border-radius:12px;padding:10px;min-height:64px;margin-top:10px}
+.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,44px);gap:6px;justify-content:center;margin-top:8px}
+.dpad button{font-size:1.3rem;border:3px solid var(--ink);border-radius:10px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.dpad button:active{transform:translate(2px,2px);box-shadow:none}
+.labnote{font-size:.85rem;font-weight:700;color:#5a5078;margin-top:8px}
+
+/* ============ JUEGOS ============ */
+.match-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}
+@media(max-width:640px){.match-grid{grid-template-columns:1fr}}
+.mbtn{
+  width:100%;text-align:left;border:3px solid var(--ink);border-radius:14px;background:#fff;
+  font-weight:800;font-size:.88rem;padding:12px;margin-bottom:10px;box-shadow:3px 3px 0 var(--ink);transition:all .15s;
+}
+.mbtn.sel{background:var(--yellow)}
+.mbtn.ok{background:#d9f7d0;pointer-events:none;opacity:.85}
+.mbtn.bad{animation:shake .4s;background:#ffe1e1}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+.class-card{text-align:center;padding:30px 20px;min-height:120px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:900}
+.class-btns{display:flex;gap:14px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.bigbtn{font-family:'Fredoka',sans-serif;font-size:1.1rem;padding:14px 24px;border-radius:16px;border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.bigbtn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.bigbtn.ev{background:var(--yellow)} .bigbtn.be{background:var(--teal);color:#fff}
+.feedback-line{text-align:center;font-weight:900;min-height:28px;margin-top:12px;font-size:1.05rem}
+
+#seqPool,#seqAns{display:flex;flex-wrap:wrap;gap:10px;min-height:60px;padding:12px;border-radius:14px;margin:10px 0}
+#seqPool{background:#f0ebff;border:3px dashed var(--purple)}
+#seqAns{background:#fff;border:3px solid var(--ink);counter-reset:sq}
+.schip{
+  border:3px solid var(--ink);background:#fff;border-radius:12px;padding:10px 14px;font-weight:800;font-size:.86rem;
+  box-shadow:3px 3px 0 var(--ink);
+}
+#seqAns .schip{background:#eef7ff}
+#seqAns .schip::before{counter-increment:sq;content:counter(sq) ". ";font-family:'Fredoka',sans-serif;color:var(--purple)}
+.schip.good{background:#d9f7d0}.schip.bad2{background:#ffe1e1}
+
+/* ============ CRUCIGRAMA ============ */
+.cw-scroll{overflow-x:auto;padding-bottom:8px}
+#cwGrid{display:grid;grid-template-columns:repeat(16,var(--cw));gap:2px;width:max-content;margin:0 auto}
+.cwcell{position:relative}
+.cwcell.block{background:#2e2545;border-radius:4px}
+.cwcell input{
+  width:var(--cw);height:var(--cw);border:2px solid var(--ink);border-radius:6px;background:#fff;
+  text-align:center;font-weight:900;font-size:calc(var(--cw)*.5);text-transform:uppercase;
+  font-family:'Nunito',sans-serif;padding:0;
+}
+.cwcell input:focus{outline:3px solid var(--purple)}
+.cwcell.hl input{background:#ffe9a8}
+.cwcell input.correct{background:#c9f2c9;border-color:#2e8b2e}
+.cwcell input.wrong{background:#ffd2d2;border-color:#c22}
+.cwcell .num{position:absolute;top:1px;left:2px;font-size:calc(var(--cw)*.26);font-weight:900;z-index:2;pointer-events:none}
+.cw-clues{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+@media(max-width:640px){.cw-clues{grid-template-columns:1fr}}
+.cw-clues li{font-weight:700;font-size:.9rem;margin-bottom:8px;cursor:pointer;padding:6px 8px;border-radius:8px;list-style:none}
+.cw-clues li:hover{background:#f0ebff}
+.cw-clues li.activeClue{background:var(--yellow)}
+
+/* ============ SOPA ============ */
+#wsGrid{display:grid;grid-template-columns:repeat(12,var(--ws));gap:2px;width:max-content;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.wsc{
+  width:var(--ws);height:var(--ws);display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:calc(var(--ws)*.5);background:#fff;border:2px solid #d9d2f2;border-radius:6px;
+}
+.wsc.sel{background:var(--yellow);border-color:var(--ink)}
+.wsc.found{background:#c9f2c9;border-color:#2e8b2e}
+#wsWords{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+#wsWords span{background:#fff;border:3px solid var(--ink);border-radius:99px;padding:6px 14px;font-weight:900;font-size:.85rem}
+#wsWords span.done{background:#c9f2c9;text-decoration:line-through;opacity:.75}
+
+/* ============ QUIZ ============ */
+.qopt{
+  display:block;width:100%;text-align:left;margin:10px 0;padding:14px 16px;border:3px solid var(--ink);
+  border-radius:14px;background:#fff;font-weight:800;font-size:.95rem;box-shadow:3px 3px 0 var(--ink);
+}
+.qopt:hover{background:#f0ebff}
+.qopt.right{background:#c9f2c9}
+.qopt.wrongpick{background:#ffd2d2}
+.qbar{height:14px;background:#e8e2ff;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin:12px 0 20px}
+.qbar div{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple));width:0;transition:width .4s}
+
+/* ============ CIERRE ============ */
+.checklist{list-style:none}
+.checklist li{font-weight:800;padding:8px 0;border-bottom:2px dashed #d9d2f2;display:flex;justify-content:space-between;gap:10px}
+.checklist .st{color:#bbb}
+.checklist .st.on{color:#e6a700}
+textarea{
+  width:100%;border:3px solid var(--ink);border-radius:12px;padding:10px;font-family:'Nunito',sans-serif;
+  font-size:.95rem;font-weight:600;min-height:70px;background:#fff;
+}
+footer{background:var(--ink);color:#cfc6ee;text-align:center;padding:26px 16px;font-size:.85rem;font-weight:700;margin-top:40px}
+
+/* toast + confetti */
+#toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);z-index:99;
+  background:var(--ink);color:#fff;font-weight:900;padding:12px 22px;border-radius:99px;border:3px solid #fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.3);transition:transform .3s;max-width:90vw;text-align:center;
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.confetti{position:fixed;z-index:98;font-size:1.5rem;pointer-events:none;animation:pop 1s ease-out forwards}
+@keyframes pop{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(.4) rotate(300deg);opacity:0}}
+
+@media print{
+  nav,#laboratorio,#toast,.btn,.floater,.no-print{display:none!important}
+  body{background:#fff}
+  .card{box-shadow:none;break-inside:avoid}
+  .hero{background:#fff;color:var(--ink);border:none;padding:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="inicio">
+  <span class="floater" style="top:14%;left:6%">🐲</span>
+  <span class="floater" style="top:60%;left:12%;animation-delay:1s">🐜</span>
+  <span class="floater" style="top:22%;right:8%;animation-delay:.5s">🦋</span>
+  <span class="floater" style="top:65%;right:14%;animation-delay:1.6s">⭐</span>
+  <div class="badge">CS FUNDAMENTALS · CURSO F · LECCIONES 3 Y 4</div>
+  <h1>¡Sprites <span>en Acción!</span></h1>
+  <p class="sub">Taller de refuerzo: <b>Cómo hacer Sprites</b> + <b>Sprites en acción</b>. Aprende, juega, programa y gana estrellas. 🌟</p>
+  <div class="chips">
+    <span class="chip">🎓 Grado 6°</span>
+    <span class="chip">🕹️ Sprite Lab</span>
+    <span class="chip">🧩 8 actividades</span>
+    <span class="chip star" id="starChip">⭐ Estrellas: <b id="starCount">0/7</b></span>
+  </div>
+  <a class="btn" href="#aprende">🚀 ¡Empezar el taller!</a>
+</header>
+
+<!-- ================= NAV ================= -->
+<nav class="no-print">
+  <a href="#inicio">🏠 Inicio</a>
+  <a href="#aprende">📖 Aprende</a>
+  <a href="#bloques">🧩 Bloques</a>
+  <a href="#laboratorio" class="hot">🕹️ Laboratorio</a>
+  <a href="#juegos">🎮 Juegos</a>
+  <a href="#crucigrama">✏️ Crucigrama</a>
+  <a href="#sopa">🔎 Sopa de letras</a>
+  <a href="#quiz">🧠 Quiz</a>
+  <a href="#cierre">🏁 Cierre</a>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= 1. FUNDAMENTACIÓN ================= -->
+<section id="aprende" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 1</span><h2>📖 Aprende los conceptos clave</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#ff5da2" stroke-width="4" stroke-linecap="round"/></svg>
+  <p class="lead">En las Lecciones 3 y 4 aprendimos a crear escenas con <b>Sprite Lab</b>. Antes de jugar, ¡repasemos las 5 palabras poderosas de este taller!</p>
+
+  <div class="grid g5">
+    <div class="card concept c-purple"><span class="ico">👾</span><h3>Sprite</h3><p>Un gráfico en la pantalla con <b>ubicación</b>, <b>tamaño</b> y <b>apariencia</b>.</p><span class="ej">Ej: una hormiga, un dragón o una nave.</span></div>
+    <div class="card concept c-pink"><span class="ico">📝</span><h3>Algoritmo</h3><p>Una <b>lista de pasos</b> para completar una tarea.</p><span class="ej">Como una receta de cocina.</span></div>
+    <div class="card concept c-blue"><span class="ico">💻</span><h3>Programa</h3><p>Un algoritmo que fue <b>codificado</b> en algo que una máquina puede ejecutar.</p><span class="ej">Tu proyecto en Sprite Lab.</span></div>
+    <div class="card concept c-teal"><span class="ico">🏃</span><h3>Comportamiento</h3><p>Acción que un sprite realiza <b>continuamente</b> hasta que se le dice que pare.</p><span class="ej">Girar, tambalearse, moverse al este…</span></div>
+    <div class="card concept c-orange"><span class="ico">⚡</span><h3>Evento</h3><p>Una acción que <b>causa que algo suceda</b> en el programa.</p><span class="ej">Presionar una tecla, hacer clic, que pasen 5 segundos.</span></div>
+  </div>
+
+  <h3 style="margin:30px 0 6px">⚡ ¿Cómo viaja una señal en tu programa?</h3>
+  <p style="font-weight:700;margin-bottom:8px">Cuando el usuario interactúa, esto ocurre en orden:</p>
+  <div class="flow">
+    <div class="step" style="background:#fff3d6">1️⃣ El usuario presiona una tecla 🎹</div>
+    <div class="arrow">➡️</div>
+    <div class="step" style="background:#e3f6ff">2️⃣ El teclado envía una señal 📡</div>
+    <div class="arrow">➡️</div>
+    <div class="step" style="background:#f0e6ff">3️⃣ El computador decide según tu código 🧠</div>
+    <div class="arrow">➡️</div>
+    <div class="step" style="background:#ddf9e4">4️⃣ La pantalla se actualiza 🖥️</div>
+  </div>
+
+  <div class="card c-yellow" style="margin-top:20px">
+    <h3>🐜🦋 El reto de la escena (Lección 3)</h3>
+    <p style="font-weight:700;margin:8px 0">Este era el algoritmo en lenguaje cotidiano… ¿recuerdas cómo se veía en código?</p>
+    <div class="flow">
+      <div class="step">🌈 Crear fondo azul y rosa</div>
+      <div class="step">🐜 Hormiga abajo a la izquierda que <b>se tambalea</b></div>
+      <div class="step">🦋 Libélula arriba que <b>se mueve a la derecha</b></div>
+    </div>
+    <div class="tipbox">💡 <b>¿Dos comportamientos a la vez?</b> ¡Un sprite puede marchar y aplaudir al mismo tiempo! Pero ojo: si le pides <i>girar a la izquierda</i> y <i>girar a la derecha</i> a la vez… las fuerzas se pelean y queda casi quieto. 😅 ¡Pruébalo en el laboratorio!</div>
+  </div>
+</section>
+
+<!-- ================= 2. BLOQUES ================= -->
+<section id="bloques" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 2</span><h2>🧩 Mis bloques en español</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#2ed3b7" stroke-width="4" stroke-linecap="round"/></svg>
+  <p class="lead">Estas son tus tarjetas de programación de Sprite Lab. ¡Úsalas como referencia durante todo el taller!</p>
+  <div class="grid g3">
+    <div class="card bcat c-orange"><h3>🌍 Mundo</h3>
+      <span class="block w">establecer color de fondo a [rojo]</span>
+      <span class="block w">establecer fondo a [imagen]</span>
+      <p style="font-size:.82rem;font-weight:700;margin-top:8px">Controla el escenario donde ocurre la acción.</p>
+    </div>
+    <div class="card bcat c-purple"><h3>👾 Sprites</h3>
+      <span class="block s">crear nuevo sprite [disfraz] en (x, y)</span>
+      <span class="block s">establecer tamaño de [sprite] a [%]</span>
+      <span class="block s">cambiar tamaño de [sprite] en [n]</span>
+      <span class="block s">mover [sprite] píxeles al [Norte]</span>
+      <span class="block s">cambiar color de [sprite] a [azul]</span>
+      <p style="font-size:.82rem;font-weight:700;margin-top:8px">🧭 Norte = arriba · Sur = abajo · Este = derecha · Oeste = izquierda.</p>
+    </div>
+    <div class="card bcat c-blue"><h3>📍 Ubicación</h3>
+      <span class="block l">ubicación x: [200] y: [200]</span>
+      <p style="font-size:.82rem;font-weight:700;margin-top:8px">El plano va de 0 a 400 en X y en Y. (0,0) es la esquina inferior izquierda y (200,200) el centro.</p>
+    </div>
+    <div class="card bcat c-teal"><h3>🏃 Comportamientos</h3>
+      <span class="block b">sprite comienza [comportamiento]</span>
+      <span class="block b">sprite se detiene [comportamiento]</span>
+      <span class="block b">sprite detiene todo</span>
+      <div style="margin-top:8px">
+        <span class="block mini">tambalearse</span><span class="block mini">girar izquierda</span><span class="block mini">girar derecha</span><span class="block mini">moverse al este</span><span class="block mini">moverse al oeste</span><span class="block mini">moverse al norte</span><span class="block mini">moverse al sur</span><span class="block mini">…y reaparecer</span><span class="block mini">crecer</span><span class="block mini">encogerse</span><span class="block mini">vibrar</span><span class="block mini">aletear</span><span class="block mini">vagar</span>
+      </div>
+    </div>
+    <div class="card bcat c-yellow"><h3>⚡ Eventos</h3>
+      <span class="block e">al ejecutar</span>
+      <span class="block e">cuando tecla [espacio] presionada</span>
+      <span class="block e">en [5] segundos</span>
+      <span class="block e">cuando [sprite1] toca a [sprite2]</span>
+      <span class="block e">cuando se hace clic en [sprite]</span>
+      <p style="font-size:.82rem;font-weight:700;margin-top:8px">Los eventos crean sus propios mini-programas.</p>
+    </div>
+    <div class="card c-pink" style="display:flex;flex-direction:column;justify-content:center;text-align:center">
+      <span style="font-size:2.6rem">🎯</span>
+      <h3>¡Reto del taller!</h3>
+      <p style="font-weight:700">Completa las actividades y gana las <b>7 estrellas</b>. ¡Demuestra que eres maestro de los sprites!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. LABORATORIO ================= -->
+<section id="laboratorio" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 3</span><h2>🕹️ Laboratorio de Sprites</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#7c4dff" stroke-width="4" stroke-linecap="round"/></svg>
+  <p class="lead">¡Un mini Sprite Lab en tu navegador! Usa los botones-bloque para dar <b>comportamientos</b> a tu dragón y dispara <b>eventos</b> con el clic y las flechas. <b>Misión:</b> prueba al menos 4 acciones distintas para ganar tu estrella. ⭐</p>
+
+  <div class="lab-grid">
+    <div>
+      <div id="stage" class="bg-grid">
+        <div id="bubble">¡Hola! 👋</div>
+        <div id="spriteWrap"><span id="spriteInner">🐲</span></div>
+      </div>
+      <p class="labnote">👆 <b>Haz clic directamente sobre el dragón</b> para activar el evento configurado en el panel. También puedes usar las flechas del teclado o el mando.</p>
+    </div>
+    <div class="card panel">
+      <h3>🏃 Comportamientos — <i>"sprite comienza…"</i></h3>
+      <div id="startBtns"></div>
+      <h3>🛑 <i>"sprite se detiene…"</i> (toca un comportamiento activo para detenerlo)</h3>
+      <ul id="activeB"></ul>
+      <button class="bbtn stop" id="stopAll" style="margin-top:8px">🛑 DETENER TODO</button>
+
+      <h3>⚡ Evento: cuando se hace clic en el sprite…</h3>
+      <div id="clickActions">
+        <button class="bbtn sel" data-act="vuelta">↩️ Da una vuelta</button>
+        <button class="bbtn" data-act="hola">💬 Dice ¡Hola!</button>
+        <button class="bbtn" data-act="color">🎨 Cambia de color</button>
+      </div>
+
+      <h3>⚡ Evento: cuando se presiona una flecha → el dragón se mueve</h3>
+      <div class="dpad">
+        <span></span><button data-dx="0" data-dy="20">⬆️</button><span></span>
+        <button data-dx="-20" data-dy="0">⬅️</button><button data-dx="0" data-dy="-20">⬇️</button><button data-dx="20" data-dy="0">➡️</button>
+      </div>
+
+      <h3>🌍 Mundo</h3>
+      <button class="bbtn" data-bg="bg-grid">⬜ Cuadrícula</button>
+      <button class="bbtn" data-bg="bg-space">🌌 Espacio</button>
+      <button class="bbtn" data-bg="bg-forest">🌳 Bosque</button>
+      <button class="bbtn stop" id="resetSim">🔄 Reiniciar escena</button>
+
+      <div id="log">▶ Presiona "Ejecutar"… ¡o empieza a tocar botones!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. JUEGOS ================= -->
+<section id="juegos" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 4</span><h2>🎮 ¡A jugar y reforzar!</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#ff8c42" stroke-width="4" stroke-linecap="round"/></svg>
+
+  <!-- 4.1 Relacionar -->
+  <div class="card c-purple" id="relacionar" style="margin-bottom:26px">
+    <h3>🔗 Juego 1 · Relaciona el concepto con su definición</h3>
+    <p style="font-weight:700;margin:8px 0 16px">Toca un concepto y luego su definición correcta. ¡Inténtalo con el menor número de intentos!</p>
+    <div class="match-grid">
+      <div id="mTerms"></div>
+      <div id="mDefs"></div>
+    </div>
+    <p style="font-weight:900">Intentos: <span id="mTries">0</span> · <span id="mMsg"></span></p>
+  </div>
+
+  <!-- 4.2 Clasificador -->
+  <div class="card c-yellow" id="clasifica" style="margin-bottom:26px">
+    <h3>⚡🏃 Juego 2 · ¿Evento o Comportamiento?</h3>
+    <p style="font-weight:700;margin:8px 0 16px">Lee la tarjeta y clasifícala. Necesitas 6 o más aciertos de 8 para ganar la estrella.</p>
+    <p style="text-align:center;font-weight:900" id="clProg">Tarjeta 1 de 8</p>
+    <div class="card class-card" id="clCard" style="box-shadow:none;background:#faf7ff">🎮 Presiona "Comenzar"</div>
+    <div class="class-btns">
+      <button class="bigbtn ev" id="clEv">⚡ EVENTO</button>
+      <button class="bigbtn be" id="clBe">🏃 COMPORTAMIENTO</button>
+    </div>
+    <div class="feedback-line" id="clFb"></div>
+    <div style="text-align:center"><button class="btn blue small" id="clStart">▶ Comenzar / Reiniciar</button></div>
+  </div>
+
+  <!-- 4.3 Ordenar -->
+  <div class="card c-teal" id="ordena">
+    <h3>🧱 Juego 3 · Ordena el algoritmo de la escena</h3>
+    <p style="font-weight:700;margin:8px 0 8px">Toca las fichas en el orden correcto para construir el programa: primero el <b>mundo</b>, luego los <b>sprites</b> y al final los <b>comportamientos</b>.</p>
+    <div id="seqPool"></div>
+    <p style="font-weight:900">👇 Tu algoritmo (toca una ficha para devolverla):</p>
+    <div id="seqAns"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn teal small" id="seqCheck">✔ Verificar orden</button>
+      <button class="btn small" style="background:#eee" id="seqReset">🔀 Mezclar de nuevo</button>
+    </div>
+    <p class="feedback-line" id="seqFb" style="text-align:left"></p>
+  </div>
+</section>
+
+<!-- ================= 5. CRUCIGRAMA ================= -->
+<section id="crucigrama" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 5</span><h2>✏️ Crucigrama Spriter</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#4d96ff" stroke-width="4" stroke-linecap="round"/></svg>
+  <p class="lead">Completa las 8 palabras del taller. Toca una celda y escribe. Usa <b>Pista</b> si te bloqueas… ¡pero la estrella es sin <b>Revelar</b>! 😉</p>
+  <div class="card">
+    <div class="cw-scroll"><div id="cwGrid"></div></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;justify-content:center">
+      <button class="btn teal small" id="cwCheck">✔ Verificar</button>
+      <button class="btn small" style="background:#eee" id="cwHint">💡 Pista</button>
+      <button class="btn pink small" id="cwReveal">👀 Revelar (sin estrella)</button>
+      <button class="btn small" style="background:#eee" id="cwClear">🧹 Borrar</button>
+    </div>
+    <p class="feedback-line" id="cwMsg" style="text-align:center"></p>
+    <div class="cw-clues">
+      <div><h3>➡️ Horizontales</h3><ul id="cluesH"></ul></div>
+      <div><h3>⬇️ Verticales</h3><ul id="cluesV"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. SOPA ================= -->
+<section id="sopa" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 6</span><h2>🔎 Sopa de Letras</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#5cd85c" stroke-width="4" stroke-linecap="round"/></svg>
+  <p class="lead">Encuentra las <b>8 palabras</b>. Mantén presionado y arrastra desde la primera letra hasta la última (¡algunas pueden estar al revés o en diagonal!). Funciona con mouse o con el dedo. 📱</p>
+  <div class="card">
+    <div class="cw-scroll"><div id="wsGrid"></div></div>
+    <div id="wsWords"></div>
+    <div style="text-align:center;margin-top:16px">
+      <button class="btn small" style="background:#eee" id="wsReset">🔄 Nueva sopa</button>
+    </div>
+    <p class="feedback-line" id="wsMsg" style="text-align:center"></p>
+  </div>
+</section>
+
+<!-- ================= 7. QUIZ ================= -->
+<section id="quiz" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 7</span><h2>🧠 Quiz final: ¿Cuánto aprendiste?</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#ffc93c" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="card c-pink">
+    <div class="qbar"><div id="qFill"></div></div>
+    <div id="quizBox"></div>
+  </div>
+</section>
+
+<!-- ================= 8. CIERRE ================= -->
+<section id="cierre" class="reveal">
+  <div class="sec-head"><span class="sec-num">PASO 8</span><h2>🏁 Reflexión y medallas</h2></div>
+  <svg class="squiggle" width="220" height="12" viewBox="0 0 220 12"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 122 8 T 142 8 T 162 8 T 182 8 T 202 8" fill="none" stroke="#ff5da2" stroke-width="4" stroke-linecap="round"/></svg>
+
+  <div class="grid g2">
+    <div class="card c-yellow">
+      <h3>🌟 Tu progreso</h3>
+      <ul class="checklist" id="checklist">
+        <li>🕹️ Laboratorio: probaste 4 acciones <span class="st" data-s="lab">☆</span></li>
+        <li>🔗 Relacionaste los 6 conceptos <span class="st" data-s="parejas">☆</span></li>
+        <li>⚡ Clasificador Evento/Comportamiento <span class="st" data-s="clasifica">☆</span></li>
+        <li>🧱 Ordenaste el algoritmo <span class="st" data-s="ordena">☆</span></li>
+        <li>✏️ Crucigrama completo <span class="st" data-s="cruci">☆</span></li>
+        <li>🔎 Sopa de letras completa <span class="st" data-s="sopa">☆</span></li>
+        <li>🧠 Quiz aprobatorio (6/8 o más) <span class="st" data-s="quiz">☆</span></li>
+      </ul>
+      <p style="font-weight:900;margin-top:12px;font-size:1.1rem" id="finalMsg">¡Completa las actividades para ganar tus 7 estrellas!</p>
+      <button class="btn blue small no-print" onclick="window.print()" style="margin-top:10px">🖨️ Imprimir mi progreso</button>
+    </div>
+    <div class="card c-teal">
+      <h3>💭 Reflexiona y comparte con tu clase</h3>
+      <p style="font-weight:800;margin:12px 0 6px">1. ¿Qué consejo le darías a un amigo que quiere crear sus propios programas en Sprite Lab?</p>
+      <textarea placeholder="Escribe tu consejo aquí…"></textarea>
+      <p style="font-weight:800;margin:12px 0 6px">2. ¿Qué otras formas de darle control al usuario se te ocurren, además de las flechas?</p>
+      <textarea placeholder="Escribe tus ideas aquí…"></textarea>
+      <p style="font-weight:800;margin:12px 0 6px">3. ¿Qué tipo de app o juego te gustaría crear con sprites y eventos?</p>
+      <textarea placeholder="Describe tu proyecto soñado…"></textarea>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Taller de refuerzo · CS Fundamentals — Curso F · Lección 3: Cómo hacer Sprites · Lección 4: Sprites en acción.<br>
+  Basado en las diapositivas del curso y las tarjetas de bloques de Sprite Lab en español. 💜 ¡Sigue creando!
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* ================= UTILIDADES ================= */
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2300);}
+function burst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,em=['🎉','⭐','✨','🎊','💜'];
+  for(let i=0;i<16;i++){const s=document.createElement('span');s.className='confetti';s.textContent=em[i%em.length];
+    s.style.left=cx+'px';s.style.top=cy+'px';
+    s.style.setProperty('--tx',(Math.random()*300-150)+'px');s.style.setProperty('--ty',(Math.random()*-260-40)+'px');
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1100);}}
+const stars={n:0,earned:{}};
+function earnStar(id,el){if(stars.earned[id])return;stars.earned[id]=true;stars.n++;
+  $('#starCount').textContent=stars.n+'/7';
+  const li=document.querySelector(`.st[data-s="${id}"]`);if(li){li.textContent='⭐';li.classList.add('on');}
+  toast('⭐ ¡Ganaste una estrella!');if(el)burst(el);
+  if(stars.n===7){setTimeout(()=>toast('🏆 ¡INCREÍBLE! Completaste todas las estrellas del taller.'),2500);
+    $('#finalMsg').textContent='🏆 ¡7 de 7! Eres MAESTRO/A DE LOS SPRITES. ¡Felicitaciones!';}
+  else $('#finalMsg').textContent=`¡Vas ${stars.n} de 7 estrellas! Sigue así. 💪`;}
+
+/* reveal on scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.08});
+$$('.reveal').forEach(el=>io.observe(el));
+
+/* ================= SIMULADOR ================= */
+(function(){
+  const stage=$('#stage'),wrapEl=$('#spriteWrap'),inner=$('#spriteInner'),bubble=$('#bubble'),logEl=$('#log');
+  const st={x:200,y:200,size:100,angle:0,set:new Set(),wob:0,vx:0,vy:0,spin:0,hue:0};
+  const LBL={tambalear:'🤸 Tambalearse',girarIzq:'↩️ Girar izquierda',girarDer:'↪️ Girar derecha',este:'➡️ Moverse al este',crecer:'📈 Crecer',encoger:'📉 Encogerse',vibrar:'〰️ Vibrar'};
+  const labSet=new Set();
+  function log(m){logEl.textContent='> '+m;}
+  function render(){
+    wrapEl.style.left=(st.x+st.vx)/400*100+'%';
+    wrapEl.style.top=(400-(st.y+st.vy))/400*100+'%';
+    inner.style.transform=`translate(-50%,-50%) rotate(${st.angle}deg) scale(${st.size/100})`;
+    inner.style.filter=st.hue?`hue-rotate(${st.hue}deg) saturate(1.5) drop-shadow(2px 3px 0 rgba(0,0,0,.25))`:'drop-shadow(2px 3px 0 rgba(0,0,0,.25))';
+    bubble.style.left=(st.x)/400*100+'%';bubble.style.top=(400-st.y)/400*100+'%';
+  }
+  function renderActive(){const ul=$('#activeB');ul.innerHTML='';
+    if(st.set.size===0){ul.innerHTML='<li style="background:#bbb;cursor:default">Ninguno: el sprite está quieto 😴</li>';return;}
+    st.set.forEach(b=>{const li=document.createElement('li');li.textContent=LBL[b]+' ✕';li.onclick=()=>stopB(b);ul.appendChild(li);});}
+  function startB(b){st.set.add(b);renderActive();log('🏃 El dragón comienza: '+LBL[b]);labSet.add('comienza');check();}
+  function stopB(b){st.set.delete(b);if(b==='tambalear')st.wob=0;if(b==='vibrar'){st.vx=0;st.vy=0;}renderActive();log('🛑 El dragón se detiene: '+LBL[b]);labSet.add('detiene');check();}
+  function check(){if(labSet.size>=4)earnStar('lab',$('#stage'));}
+  const box=$('#startBtns');
+  Object.keys(LBL).forEach(k=>{const b=document.createElement('button');b.className='bbtn start';b.textContent='▶ comienza: '+LBL[k];b.onclick=()=>startB(k);box.appendChild(b);});
+  $('#stopAll').onclick=()=>{st.set.clear();st.wob=0;st.vx=0;st.vy=0;renderActive();log('🛑 ¡DETENER TODO! El dragón queda completamente quieto.');labSet.add('detiene');check();};
+  let last=performance.now();
+  function loop(t){const dt=Math.min((t-last)/1000,.05);last=t;
+    if(st.set.has('girarDer'))st.angle+=180*dt;
+    if(st.set.has('girarIzq'))st.angle-=180*dt;
+    if(st.spin>0){const step=Math.min(st.spin,540*dt);st.angle+=step;st.spin-=step;}
+    if(st.set.has('tambalear'))st.wob+=dt*9; 
+    if(st.set.has('este')){st.x+=85*dt;if(st.x>430)st.x=-30;}
+    if(st.set.has('crecer'))st.size=Math.min(st.size+45*dt,300);
+    if(st.set.has('encoger'))st.size=Math.max(st.size-45*dt,25);
+    if(st.set.has('vibrar')){st.vx=Math.random()*6-3;st.vy=Math.random()*6-3;}
+    const wobX=st.set.has('tambalear')?Math.sin(st.wob)*10:0;
+    wrapEl.style.left=(st.x+wobX+(st.set.has('vibrar')?st.vx:0))/400*100+'%';
+    wrapEl.style.top=(400-(st.y+(st.set.has('vibrar')?st.vy:0)))/400*100+'%';
+    inner.style.transform=`translate(-50%,-50%) rotate(${st.angle}deg) scale(${st.size/100})`;
+    requestAnimationFrame(loop);}
+  requestAnimationFrame(loop);
+  /* evento clic en sprite */
+  let clickAct='vuelta';
+  $$('#clickActions .bbtn').forEach(b=>b.onclick=()=>{$$('#clickActions .bbtn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');clickAct=b.dataset.act;});
+  inner.addEventListener('pointerdown',e=>{e.preventDefault();labSet.add('clic');log('⚡ EVENTO: ¡clic en el sprite!');
+    if(clickAct==='vuelta')st.spin=360;
+    else if(clickAct==='hola'){bubble.classList.add('show');setTimeout(()=>bubble.classList.remove('show'),1400);}
+    else{st.hue=(st.hue+72)%360;}check();});
+  /* evento teclas */
+  function move(dx,dy){st.x=Math.min(390,Math.max(10,st.x+dx));st.y=Math.min(390,Math.max(10,st.y+dy));
+    labSet.add('tecla');log('⚡ EVENTO: tecla de dirección → el dragón se mueve.');check();}
+  window.addEventListener('keydown',e=>{const tag=document.activeElement.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA')return;
+    const m={ArrowUp:[0,20],ArrowDown:[0,-20],ArrowLeft:[-20,0],ArrowRight:[20,0]};
+    if(m[e.key]){e.preventDefault();move(...m[e.key]);}});
+  $$('.dpad button').forEach(b=>b.onclick=()=>move(+b.dataset.dx,+b.dataset.dy));
+  /* fondos */
+  $$('[data-bg]').forEach(b=>b.onclick=()=>{stage.className=b.dataset.bg;log('🌍 El fondo cambió a: '+b.textContent.trim());labSet.add('fondo');check();});
+  $('#resetSim').onclick=()=>{Object.assign(st,{x:200,y:200,size:100,angle:0,wob:0,vx:0,vy:0,spin:0,hue:0});st.set.clear();renderActive();log('🔄 Escena reiniciada. ¡A programar de nuevo!');};
+  render();renderActive();
+})();
+
+/* ================= RELACIONAR ================= */
+(function(){
+  const PAIRS=[
+    ['👾 Sprite','Gráfico en pantalla con ubicación, tamaño y apariencia'],
+    ['📝 Algoritmo','Lista de pasos para completar una tarea'],
+    ['🏃 Comportamiento','Acción continua que hace un sprite hasta que se detiene'],
+    ['⚡ Evento','Acción que causa que algo suceda'],
+    ['💻 Programa','Algoritmo codificado que puede ejecutar una máquina'],
+    ['🎭 Disfraz','La apariencia del sprite: cómo se ve en pantalla']];
+  let selT=null,selD=null,tries=0,done=0;
+  const tBox=$('#mTerms'),dBox=$('#mDefs');
+  function build(){
+    tBox.innerHTML='';dBox.innerHTML='';selT=selD=null;tries=0;done=0;$('#mTries').textContent=0;$('#mMsg').textContent='';
+    shuffle(PAIRS).forEach(p=>{const b=document.createElement('button');b.className='mbtn';b.textContent=p[0];b.dataset.k=p[0];
+      b.onclick=()=>{if(b.classList.contains('ok'))return;$$('.mbtn.sel').forEach(x=>{if(x.parentElement===tBox)x.classList.remove('sel')});b.classList.add('sel');selT=b;tryMatch();};tBox.appendChild(b);});
+    shuffle(PAIRS).forEach(p=>{const b=document.createElement('button');b.className='mbtn';b.textContent=p[1];b.dataset.k=p[0];
+      b.onclick=()=>{if(b.classList.contains('ok'))return;$$('.mbtn.sel').forEach(x=>{if(x.parentElement===dBox)x.classList.remove('sel')});b.classList.add('sel');selD=b;tryMatch();};dBox.appendChild(b);});}
+  function tryMatch(){
+    if(!selT||!selD)return;tries++;$('#mTries').textContent=tries;
+    if(selT.dataset.k===selD.dataset.k){selT.classList.add('ok');selD.classList.add('ok');selT.classList.remove('sel');selD.classList.remove('sel');done++;
+      if(done===PAIRS.length){$('#mMsg').textContent=`🎉 ¡Completado en ${tries} intentos!`;earnStar('parejas',$('#relacionar'));}}
+    else{const a=selT,b=selD;a.classList.add('bad');b.classList.add('bad');
+      setTimeout(()=>{a.classList.remove('bad','sel');b.classList.remove('bad','sel');},450);}
+    selT=selD=null;}
+  build();
+})();
+
+/* ================= CLASIFICADOR ================= */
+(function(){
+  const ITEMS=[
+    ['Presionar la flecha ⬅️ del teclado','E'],
+    ['Girar sin parar ↪️','C'],
+    ['Hacer clic sobre el sprite 🖱️','E'],
+    ['Tambalearse continuamente 🤸','C'],
+    ['Que un sprite toque a otro sprite 💥','E'],
+    ['Moverse al este y reaparecer ➡️🔁','C'],
+    ['Que pasen 5 segundos ⏱️','E'],
+    ['Vibrar en su lugar 〰️','C']];
+  let order=[],idx=0,score=0,lock=true;
+  const card=$('#clCard'),fb=$('#clFb'),prog=$('#clProg');
+  $('#clStart').onclick=()=>{order=shuffle(ITEMS);idx=0;score=0;lock=false;fb.textContent='';show();};
+  function show(){if(idx>=order.length)return end();
+    card.textContent=order[idx][0];prog.textContent=`Tarjeta ${idx+1} de ${order.length} · Aciertos: ${score}`;}
+  function ans(g){if(lock)return;lock=true;const ok=order[idx][1]===g;
+    if(ok){score++;fb.textContent='✅ ¡Correcto!';card.style.background='#ddf9e4';}
+    else{fb.textContent='❌ Ups… era: '+(order[idx][1]==='E'?'⚡ EVENTO':'🏃 COMPORTAMIENTO');card.style.background='#ffd2d2';}
+    setTimeout(()=>{idx++;card.style.background='#faf7ff';lock=false;show();},1100);}
+  function end(){prog.textContent='¡Juego terminado!';
+    card.textContent=`Resultado: ${score} de 8 aciertos ${score>=6?'🌟':'💪'}`;
+    fb.textContent=score>=6?'¡Ganaste tu estrella!':'Vuelve a intentarlo: necesitas 6 aciertos.';
+    if(score>=6)earnStar('clasifica',$('#clasifica'));lock=true;}
+})();
+
+/* ================= ORDENAR ================= */
+(function(){
+  const CORRECT=[
+    '🌈 Establecer un fondo azul y rosa',
+    '🐜 Crear una hormiga en la esquina inferior izquierda',
+    '🦋 Crear una libélula en la parte superior',
+    '🤸 La hormiga comienza a tambalearse',
+    '➡️ La libélula comienza a moverse al este'];
+  const pool=$('#seqPool'),ans=$('#seqAns'),fb=$('#seqFb');
+  function chip(txt,parent){const b=document.createElement('button');b.className='schip';b.textContent=txt;
+    b.onclick=()=>{(parent===pool?ans:pool).appendChild(b);b.classList.remove('good','bad2');fb.textContent='';};
+    parent.appendChild(b);}
+  function reset(){pool.innerHTML='';ans.innerHTML='';fb.textContent='';shuffle(CORRECT).forEach(t=>chip(t,pool));}
+  $('#seqReset').onclick=reset;
+  $('#seqCheck').onclick=()=>{const items=[...ans.children];
+    if(items.length<CORRECT.length){fb.textContent='⚠️ Ainda faltan fichas: toca todas las del montón de arriba.';fb.style.color='#c70';return;}
+    let okAll=true;items.forEach((el,i)=>{const ok=el.textContent===CORRECT[i];el.classList.toggle('good',ok);el.classList.toggle('bad2',!ok);if(!ok)okAll=false;});
+    if(okAll){fb.textContent='🎉 ¡Perfecto! Primero el mundo, luego los sprites y al final los comportamientos.';fb.style.color='#1a7a1a';earnStar('ordena',$('#ordena'));}
+    else{fb.textContent='🤔 Hay pasos fuera de orden (fichas rojas). ¡Ajusta y verifica de nuevo!';fb.style.color='#c22';}};
+  reset();
+})();
+
+/* ================= CRUCIGRAMA ================= */
+(function(){
+  const WORDS=[
+    {n:1,dir:'V',r:0,c:1,w:'CLIC',clue:'"Cuando se hace ___ en el sprite": evento que activas con el mouse o el dedo.'},
+    {n:2,dir:'H',r:2,c:0,w:'DISFRAZ',clue:'Define la apariencia del sprite; se elige de la biblioteca o se dibuja.'},
+    {n:3,dir:'V',r:2,c:5,w:'ALGORITMO',clue:'Lista de pasos para completar una tarea.'},
+    {n:4,dir:'V',r:4,c:0,w:'TECLA',clue:'Cada botón del teclado; las flechas disparan eventos.'},
+    {n:5,dir:'V',r:5,c:3,w:'SPRITE',clue:'Gráfico en pantalla con ubicación, tamaño y apariencia.'},
+    {n:6,dir:'H',r:6,c:0,w:'COMPORTAMIENTO',clue:'Acción que un sprite realiza continuamente hasta que se detiene.'},
+    {n:7,dir:'V',r:6,c:10,w:'EVENTO',clue:'Acción que causa que algo suceda.'},
+    {n:8,dir:'H',r:11,c:8,w:'PROGRAMA',clue:'Algoritmo codificado que una máquina puede ejecutar.'}];
+  const R=12,C=16,grid=Array.from({length:R},()=>Array.from({length:C},()=>({letter:null,words:[],num:null,input:null})));
+  WORDS.forEach(w=>{for(let i=0;i<w.w.length;i++){const r=w.dir==='H'?w.r:w.r+i,c=w.dir==='H'?w.c+i:w.c;
+    grid[r][c].letter=w.w[i];grid[r][c].words.push(w);}grid[w.r][w.c].num=w.n;});
+  const gEl=$('#cwGrid');gEl.style.gridTemplateColumns=`repeat(${C},var(--cw))`;
+  let cur=null,usedReveal=false,completed=false;
+  for(let r=0;r<R;r++)for(let c=0;c<C;c++){const cell=grid[r][c],d=document.createElement('div');d.className='cwcell';
+    if(!cell.letter){d.classList.add('block');}
+    else{const inp=document.createElement('input');inp.maxLength=1;inp.autocapitalize='characters';inp.autocomplete='off';inp.spellcheck=false;
+      inp.dataset.r=r;inp.dataset.c=c;cell.input=inp;
+      if(cell.num){const n=document.createElement('span');n.className='num';n.textContent=cell.num;d.appendChild(n);}
+      inp.addEventListener('focus',()=>selectAt(r,c));
+      inp.addEventListener('input',()=>{inp.value=inp.value.toUpperCase().replace(/[^A-Z]/g,'');if(inp.value)nextInWord(r,c);checkSilent();});
+      inp.addEventListener('keydown',e=>{
+        if(e.key==='Backspace'&&!inp.value){e.preventDefault();prevInWord(r,c);}
+        const mv={ArrowRight:[0,1,'H'],ArrowLeft:[0,-1,'H'],ArrowDown:[1,0,'V'],ArrowUp:[-1,0,'V']}[e.key];
+        if(mv){e.preventDefault();jump(r+mv[0],c+mv[1],mv[2]);}});
+      d.appendChild(inp);}
+    gEl.appendChild(d);}
+  function selectAt(r,c){const ws=grid[r][c].words;if(!ws.length)return;
+    if(cur&&ws.length>1&&ws.includes(cur))cur=ws.find(w=>w!==cur)||cur;
+    else cur=ws.find(w=>w.dir==='H')||ws[0];
+    highlight();}
+  function selectWord(w){cur=w;highlight();const cell=grid[w.r][w.c];if(cell.input)cell.input.focus();}
+  function highlight(){$$('#cwGrid input').forEach(i=>i.parentElement.classList.remove('hl'));$$('.cw-clues li').forEach(l=>l.classList.remove('activeClue'));
+    if(!cur)return;for(let i=0;i<cur.w.length;i++){const r=cur.dir==='H'?cur.r:cur.r+i,c=cur.dir==='H'?cur.c+i:cur.c;
+      grid[r][c].input.parentElement.classList.add('hl');}
+    const li=document.querySelector(`.cw-clues li[data-id="${cur.n}${cur.dir}"]`);if(li)li.classList.add('activeClue');}
+  function nextInWord(r,c){const i=cur?idx(r,c):0;if(!cur||i<0||i>=cur.w.length-1)return;focusWord(i+1);}
+  function prevInWord(r,c){const i=cur?idx(r,c):0;if(!cur||i<=0)return;focusWord(i-1);}
+  function idx(r,c){return cur.dir==='H'?c-cur.c:r-cur.r;}
+  function focusWord(i){const r=cur.dir==='H'?cur.r:cur.r+i,c=cur.dir==='H'?cur.c+i:cur.c;grid[r][c].input.focus();}
+  function jump(r,c,dir){if(r<0||c<0||r>=R||c>=C)return;if(!grid[r][c].letter){jump(r+(dir==='V'?(r>0?-1:1):0),c+(dir==='H'?(c>0?-1:1):0),dir);return;}
+    const ws=grid[r][c].words;cur=ws.find(w=>w.dir===dir)||ws[0];highlight();grid[r][c].input.focus();}
+  /* pistas */
+  const ulH=$('#cluesH'),ulV=$('#cluesV');
+  WORDS.forEach(w=>{const li=document.createElement('li');li.dataset.id=w.n+w.dir;li.textContent=`${w.n}. ${w.clue}`;
+    li.onclick=()=>selectWord(w);(w.dir==='H'?ulH:ulV).appendChild(li);});
+  function allCells(){const out=[];for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(grid[r][c].letter)out.push(grid[r][c]);return out;}
+  function checkSilent(){if(completed)return;const cells=allCells();
+    const ok=cells.every(cl=>cl.input.value===cl.letter);
+    if(ok)finish();}
+  $('#cwCheck').onclick=()=>{let bad=0,empty=0;
+    allCells().forEach(cl=>{const v=cl.input.value;cl.input.classList.remove('correct','wrong');
+      if(!v)empty++;else if(v===cl.letter)cl.input.classList.add('correct');else{cl.input.classList.add('wrong');bad++;}});
+    if(!bad&&!empty)finish();
+    else $('#cwMsg').textContent=bad?`❌ Hay ${bad} letra(s) incorrecta(s) en rojo. ¡Tú puedes!`:'✏️ Aún hay celdas vacías.';};
+  function finish(){if(completed)return;completed=true;
+    allCells().forEach(cl=>{cl.input.classList.remove('wrong');cl.input.classList.add('correct');});
+    $('#cwMsg').textContent='🎉 ¡CRUCIGRAMA COMPLETO! Los sprites no tienen secretos para ti.';
+    if(!usedReveal)earnStar('cruci',$('#cwGrid'));else $('#cwMsg').textContent+=' (Usaste Revelar, así que esta vez sin estrella 😉)';}
+  $('#cwHint').onclick=()=>{const bad=allCells().filter(cl=>cl.input.value!==cl.letter);
+    if(!bad.length){$('#cwMsg').textContent='✨ ¡Todo está correcto! Presiona Verificar.';return;}
+    const cl=bad[Math.floor(Math.random()*bad.length)];cl.input.value=cl.letter;cl.input.classList.add('correct');checkSilent();};
+  $('#cwReveal').onclick=()=>{usedReveal=true;allCells().forEach(cl=>{cl.input.value=cl.letter;});finish();};
+  $('#cwClear').onclick=()=>{completed=false;usedReveal=false;$('#cwMsg').textContent='';
+    allCells().forEach(cl=>{cl.input.value='';cl.input.classList.remove('correct','wrong');});};
+})();
+
+/* ================= SOPA DE LETRAS ================= */
+(function(){
+  const N=12,WORDS=['SPRITE','ALGORITMO','EVENTO','PROGRAMA','TECLA','GIRAR','MUNDO','CLIC'];
+  const DIRS=[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
+  const ALPHA='ABCDEFGHIJKLMOPQRSTUVXYZ';
+  let board=[],found=new Set(),selCells=[],dragging=false,start=null;
+  const gEl=$('#wsGrid'),wBox=$('#wsWords'),msg=$('#wsMsg');
+  function gen(){board=Array.from({length:N},()=>Array(N).fill(null));
+    WORDS.slice().sort((a,b)=>b.length-a.length).forEach(w=>{
+      for(let t=0;t<500;t++){const d=DIRS[Math.floor(Math.random()*DIRS.length)];
+        const r=Math.floor(Math.random()*N),c=Math.floor(Math.random()*N);
+        const er=r+d[0]*(w.length-1),ec=c+d[1]*(w.length-1);
+        if(er<0||er>=N||ec<0||ec>=N)continue;
+        let okP=true;for(let i=0;i<w.length;i++){const cell=board[r+d[0]*i][c+d[1]*i];
+          if(cell&&cell!==w[i]){okP=false;break;}}
+        if(okP){for(let i=0;i<w.length;i++)board[r+d[0]*i][c+d[1]*i]=w[i];break;}}});
+    for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(!board[r][c])board[r][c]=ALPHA[Math.floor(Math.random()*ALPHA.length)];}
+  function render(){gEl.innerHTML='';found=new Set();selCells=[];msg.textContent='';
+    for(let r=0;r<N;r++)for(let c=0;c<N;c++){const d=document.createElement('div');d.className='wsc';d.textContent=board[r][c];d.dataset.r=r;d.dataset.c=c;gEl.appendChild(d);}
+    wBox.innerHTML='';WORDS.forEach(w=>{const s=document.createElement('span');s.textContent=w;s.dataset.w=w;wBox.appendChild(s);});}
+  function cellFromEvent(e){const rect=gEl.getBoundingClientRect();
+    const c=Math.floor((e.clientX-rect.left)/rect.width*N),r=Math.floor((e.clientY-rect.top)/rect.height*N);
+    if(r<0||c<0||r>=N||c>=N)return null;return{r,c};}
+  function path(a,b){const dr=b.r-a.r,dc=b.c-a.c;
+    if(dr===0&&dc===0)return[a];
+    if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc)))return null;
+    const len=Math.max(Math.abs(dr),Math.abs(dc)),sr=Math.sign(dr),sc=Math.sign(dc),out=[];
+    for(let i=0;i<=len;i++)out.push({r:a.r+sr*i,c:a.c+sc*i});return out;}
+  function paint(){[...gEl.children].forEach(d=>d.classList.remove('sel'));
+    selCells.forEach(p=>{const d=gEl.children[p.r*N+p.c];if(d&&!d.classList.contains('found'))d.classList.add('sel');});}
+  function clearSel(){selCells=[];paint();}
+  gEl.addEventListener('pointerdown',e=>{e.preventDefault();const p=cellFromEvent(e);if(!p)return;
+    dragging=true;start=p;selCells=[p];paint();gEl.setPointerCapture&&gEl.setPointerCapture(e.pointerId);});
+  gEl.addEventListener('pointermove',e=>{if(!dragging)return;const p=cellFromEvent(e);if(!p)return;
+    const pa=path(start,p);if(pa){selCells=pa;paint();}});
+  function endSel(){if(!dragging)return;dragging=false;
+    const str=selCells.map(p=>board[p.r][p.c]).join('');
+    const rev=str.split('').reverse().join('');
+    let hit=null;WORDS.forEach(w=>{if(!found.has(w)&&(str===w||rev===w)&&selCells.length===w.length)hit=w;});
+    if(hit){found.add(hit);selCells.forEach(p=>gEl.children[p.r*N+p.c].classList.add('found'));
+      const chip=wBox.querySelector(`[data-w="${hit}"]`);if(chip)chip.classList.add('done');
+      msg.textContent=`✅ ¡Encontraste ${hit}! (${found.size}/${WORDS.length})`;burst(gEl);
+      if(found.size===WORDS.length){msg.textContent='🏆 ¡SOPA COMPLETA! Ojos de lince 👀';earnStar('sopa',gEl);}}
+    selCells=[];setTimeout(paint,10);}
+  gEl.addEventListener('pointerup',endSel);gEl.addEventListener('pointercancel',()=>{dragging=false;clearSel();});
+  $('#wsReset').onclick=()=>{gen();render();};
+  gen();render();
+})();
+
+/* ================= QUIZ ================= */
+(function(){
+  const QS=[
+    {q:'¿Qué es un sprite?',o:['Un tipo de teclado','Un gráfico en pantalla con ubicación, tamaño y apariencia','Un sonido del computador','Un error del programa'],a:1},
+    {q:'Un algoritmo es…',o:['Un dibujo animado','Una máquina especial','Una lista de pasos para completar una tarea','Un color de fondo'],a:2},
+    {q:'¿Cuál de estas acciones es un EVENTO?',o:['Girar continuamente','Tambalearse','Crecer poco a poco','Presionar la flecha derecha'],a:3},
+    {q:'Un comportamiento es una acción que el sprite realiza…',o:['Continuamente hasta que se detiene','Una sola vez','Solo al apagar el programa','Nunca'],a:0},
+    {q:'Si un sprite marcha y aplaude a la vez y quieres que quede totalmente quieto, usas…',o:['detiene girar','crear sprite','detiene todo','establecer fondo'],a:2},
+    {q:'Cuando el usuario presiona una tecla…',o:['Se borra el programa','El teclado envía una señal y el computador decide según el código','No pasa nunca nada','El sprite desaparece'],a:1},
+    {q:'¿Cuál de estos es un comportamiento de Sprite Lab?',o:['Cuando se hace clic','Al ejecutar','En 5 segundos','Moverse al este y reaparecer'],a:3},
+    {q:'Antes de escribir código para tu escena, es recomendable…',o:['Presionar botones al azar','Borrar todos los sprites','Planear escribiendo tu algoritmo','Apagar el computador'],a:2}];
+  let i=0,score=0,answered=false;
+  const box=$('#quizBox'),fill=$('#qFill');
+  function show(){answered=false;const q=QS[i];fill.style.width=(i/QS.length*100)+'%';
+    box.innerHTML=`<p style="font-weight:900;color:#8a7fb0">Pregunta ${i+1} de ${QS.length} · Aciertos: ${score}</p>
+      <h3 style="margin:8px 0 4px">${q.q}</h3>`;
+    q.o.forEach((op,k)=>{const b=document.createElement('button');b.className='qopt';b.textContent=op;
+      b.onclick=()=>pick(b,k);box.appendChild(b);});}
+  function pick(btn,k){if(answered)return;answered=true;const q=QS[i];
+    const opts=[...box.querySelectorAll('.qopt')];
+    opts[q.a].classList.add('right');
+    if(k===q.a){score++;}else btn.classList.add('wrongpick');
+    const nx=document.createElement('button');nx.className='btn pink small';nx.style.marginTop='10px';
+    nx.textContent=i<QS.length-1?'Siguiente ➡️':'Ver mi resultado 🏁';
+    nx.onclick=()=>{i++;i<QS.length?show():end();};box.appendChild(nx);}
+  function end(){fill.style.width='100%';
+    let emoji='💪',txt='¡Buen intento! Repasa la sección "Aprende" y vuelve a intentarlo.';
+    if(score>=8){emoji='🏆';txt='¡PERFECTO! Dominas los sprites y los eventos.';}
+    else if(score>=6){emoji='🌟';txt='¡Muy bien! Tienes lo necesario para crear tus propios programas.';}
+    box.innerHTML=`<div style="text-align:center;padding:10px">
+      <div style="font-size:3.5rem">${emoji}</div>
+      <h3>Obtuviste ${score} de ${QS.length}</h3>
+      <p style="font-weight:700;margin:10px 0">${txt}</p>
+      <button class="btn blue small" id="qRetry">🔁 Intentar de nuevo</button></div>`;
+    if(score>=6)earnStar('quiz',box);
+    $('#qRetry').onclick=()=>{i=0;score=0;show();};}
+  show();
+})();
+</script>
+</body>
+</html>
