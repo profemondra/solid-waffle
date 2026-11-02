@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misión App Lab · Repaso Grado 11</title>
+<style>
+  :root{
+    --bg:#0b1020;
+    --bg-2:#111831;
+    --card:#161f3d;
+    --card-hover:#1d2850;
+    --primary:#7c5cff;
+    --primary-2:#5b8dff;
+    --accent:#3ddc97;
+    --warn:#ffb454;
+    --danger:#ff5c7a;
+    --text:#e8ecff;
+    --muted:#9aa6c7;
+    --border:#2a3564;
+    --code-bg:#0a0f1f;
+    --radius:14px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1000px 600px at 10% -10%, rgba(124,92,255,.18), transparent 60%),
+      radial-gradient(800px 500px at 110% 10%, rgba(61,220,151,.12), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  a{color:var(--primary-2);text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;outline:none}
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  /* ===== NAV ===== */
+  header.top{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(11,16,32,.75);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1200px;margin:0 auto;
+    display:flex;align-items:center;gap:14px;
+    padding:12px 18px;
+  }
+  .logo{
+    font-weight:800;letter-spacing:.5px;font-size:18px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{
+    width:12px;height:12px;border-radius:50%;
+    background:linear-gradient(135deg,var(--primary),var(--accent));
+    box-shadow:0 0 12px var(--primary);
+  }
+  nav.menu{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  nav.menu button{
+    background:transparent;color:var(--muted);
+    padding:8px 12px;border-radius:8px;font-size:14px;
+    transition:.2s;
+  }
+  nav.menu button:hover{background:var(--card);color:var(--text)}
+  nav.menu button.active{background:var(--card);color:var(--text)}
+  .points-pill{
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    padding:6px 12px;border-radius:20px;font-weight:700;font-size:13px;
+    white-space:nowrap;
+  }
+
+  /* ===== SECTIONS ===== */
+  main{max-width:1200px;margin:0 auto;padding:24px 18px 80px}
+  section{display:none;animation:fadeIn .4s ease}
+  section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h1{font-size:clamp(28px,5vw,44px);letter-spacing:-.5px;margin-bottom:10px;line-height:1.15}
+  h2{font-size:clamp(22px,3.5vw,30px);margin:6px 0 16px}
+  h3{font-size:18px;margin-bottom:8px}
+  p.lead{color:var(--muted);font-size:17px;max-width:720px}
+
+  .hero{
+    padding:40px 0 20px;
+  }
+  .hero .title{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(124,92,255,.15);color:var(--primary);
+    border:1px solid rgba(124,92,255,.35);
+    padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;
+    margin-bottom:16px;
+  }
+  .hero .cta{
+    margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;
+  }
+  .btn{
+    padding:14px 22px;border-radius:12px;font-weight:700;font-size:15px;
+    transition:transform .15s, box-shadow .15s, background .2s;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    color:white;box-shadow:0 8px 22px rgba(124,92,255,.35);
+  }
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+  .btn-ghost:hover{background:var(--card-hover)}
+  .btn-accent{background:var(--accent);color:#06231a}
+  .btn-accent:hover{transform:translateY(-2px)}
+
+  /* ===== PROGRESS ===== */
+  .progress-wrap{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px 18px;margin-top:24px;
+  }
+  .progress-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px}
+  .bar{height:10px;background:#1b2550;border-radius:999px;overflow:hidden}
+  .bar > span{
+    display:block;height:100%;
+    background:linear-gradient(90deg,var(--accent),var(--primary-2));
+    width:0%;transition:width .6s ease;
+    border-radius:999px;
+  }
+
+  /* ===== BADGES ===== */
+  .badges{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+    gap:12px;margin-top:18px;
+  }
+  .badge{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:12px;padding:12px;text-align:center;
+    transition:.25s;
+  }
+  .badge.locked{opacity:.4;filter:grayscale(.8)}
+  .badge .emoji{font-size:28px}
+  .badge .name{font-size:12px;font-weight:700;margin-top:4px}
+  .badge .desc{font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* ===== CARDS ===== */
+  .grid{display:grid;gap:14px}
+  .grid.concepts{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;
+    transition:.25s;
+  }
+  .card:hover{background:var(--card-hover);transform:translateY(-2px)}
+  .card h3{display:flex;align-items:center;gap:8px}
+  .card .icon{
+    width:32px;height:32px;border-radius:8px;
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+  }
+  .card details summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
+  .card details summary::-webkit-details-marker{display:none}
+  .card details summary .arrow{transition:.2s;color:var(--muted)}
+  .card details[open] summary .arrow{transform:rotate(90deg)}
+  .card details .body{margin-top:12px;color:var(--muted);font-size:14px}
+  .card details .body p{margin-bottom:8px}
+
+  /* ===== CODE BLOCKS ===== */
+  pre,code.inline{
+    font-family:"JetBrains Mono","Fira Code",Consolas,monospace;
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:#e8ecff;
+  }
+  pre{padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.5; white-space:pre-wrap; word-wrap:break-word;}
+  code.inline{padding:1px 6px;font-size:.9em;color:#ffd8a8}
+
+  /* ===== INTERACTIVE ===== */
+  .quiz{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-top:16px}
+  .question{font-weight:600;font-size:16px;margin-bottom:14px}
+  .options{display:grid;gap:10px}
+  .option{
+    background:var(--bg-2);border:1px solid var(--border);
+    padding:12px 14px;border-radius:10px;text-align:left;
+    color:var(--text);font-size:14px;transition:.2s;
+    display:flex;align-items:flex-start;gap:10px;
+  }
+  .option:hover{border-color:var(--primary-2);background:#1a2453}
+  .option.correct{background:rgba(61,220,151,.15);border-color:var(--accent);color:var(--accent)}
+  .option.wrong{background:rgba(255,92,122,.12);border-color:var(--danger);color:var(--danger)}
+  .option .marker{
+    flex:0 0 22px;height:22px;border:2px solid var(--border);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+  }
+  .option.correct .marker{border-color:var(--accent);background:var(--accent);color:#06231a}
+  .option.wrong .marker{border-color:var(--danger);background:var(--danger);color:#3a0814}
+
+  .feedback{
+    margin-top:14px;padding:12px 14px;border-radius:10px;
+    font-size:14px;display:none;
+  }
+  .feedback.show{display:block;animation:fadeIn .3s}
+  .feedback.ok{background:rgba(61,220,151,.12);border:1px solid var(--accent);color:#bafad8}
+  .feedback.bad{background:rgba(255,92,122,.1);border:1px solid var(--danger);color:#ffb8c4}
+
+  .nav-buttons{display:flex;justify-content:space-between;margin-top:20px;gap:10px;flex-wrap:wrap}
+
+  /* ===== WHAT IF ===== */
+  .scenario{
+    background:linear-gradient(180deg,var(--card),#111a3a);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px;margin-top:14px;
+  }
+  .scenario .tag{
+    display:inline-block;background:rgba(255,180,84,.15);color:var(--warn);
+    padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:8px;
+  }
+
+  /* ===== SIMULATOR ===== */
+  .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .sim-code,.sim-out{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px;min-height:220px;
+  }
+  .sim-out .line{margin-bottom:6px;font-size:14px}
+  .sim-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .sim-input{
+    width:100%;background:var(--bg-2);border:1px solid var(--border);
+    color:var(--text);padding:10px 12px;border-radius:8px;font-family:inherit;
+  }
+  @media(max-width:780px){.sim-grid{grid-template-columns:1fr}}
+
+  /* ===== CHALLENGE ===== */
+  .challenge-head{
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:10px;margin-bottom:14px;
+  }
+  .qnum{color:var(--muted);font-size:13px}
+  .level-pill{
+    background:var(--card);border:1px solid var(--border);
+    padding:4px 10px;border-radius:999px;font-size:12px;
+  }
+
+  /* ===== RESULTS ===== */
+  .result-card{
+    background:linear-gradient(135deg,rgba(124,92,255,.15),rgba(61,220,151,.1));
+    border:1px solid var(--border);
+    border-radius:var(--radius);padding:26px;margin-top:18px;text-align:center;
+  }
+  .score-big{font-size:56px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .topic-list{margin-top:18px;text-align:left}
+  .topic{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 12px;border-radius:8px;margin-bottom:6px;
+    background:var(--card);border:1px solid var(--border);
+  }
+  .topic .status{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+  .topic .status.ok{background:rgba(61,220,151,.2);color:var(--accent)}
+  .topic .status.review{background:rgba(255,180,84,.18);color:var(--warn)}
+
+  /* ===== CONFETTI ===== */
+  .confetti{
+    position:fixed;pointer-events:none;top:0;left:0;width:100%;height:100%;z-index:9999;
+  }
+  .confetti-piece{
+    position:absolute;width:8px;height:12px;opacity:.9;
+    animation:fall 2.5s ease-out forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+
+  /* ===== ACCESSIBILITY ===== */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+    .confetti-piece{display:none}
+  }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  @media(max-width:600px){
+    nav.menu button{padding:6px 10px;font-size:12px}
+    .hero{padding:24px 0 10px}
+    .btn{padding:12px 18px;font-size:14px}
+    .nav-inner{gap:8px;padding:10px 14px}
+    main{padding:16px 14px 60px}
+    .card details .body{font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="nav-inner">
+    <div class="logo"><span class="dot"></span> Misión App Lab</div>
+    <nav class="menu" id="navMenu" aria-label="Navegación principal">
+      <button data-nav="inicio" class="active">Inicio</button>
+      <button data-nav="conceptos">Conceptos</button>
+      <button data-nav="quepasa">¿Qué pasa si...?</button>
+      <button data-nav="retos">Retos</button>
+      <button data-nav="simulador">Simulador</button>
+      <button data-nav="desafio">Desafío final</button>
+      <button data-nav="resultados">Resultados</button>
+    </nav>
+    <div class="points-pill" aria-live="polite" id="pointsPill">⭐ 0 pts</div>
+  </div>
+</header>
+
+<main>
+
+<!-- ==================== INICIO ==================== -->
+<section id="inicio" class="active" aria-labelledby="inicio-title">
+  <div class="hero">
+    <span class="title">🚀 MISIÓN GRADO 11 · APP LAB</span>
+    <h1 id="inicio-title">Conviértete en desarrollador de aplicaciones</h1>
+    <p class="lead">
+      Repasa los conceptos fundamentales de programación en <strong>App Lab (Code.org)</strong>, el entorno que
+      utiliza <strong>JavaScript</strong> para crear aplicaciones con botones, pantallas, sonidos, imágenes y cálculos.
+      Esta página es tu entrenador personal: repasa, practica y enfréntate al desafío final.
+    </p>
+    <div class="cta">
+      <button class="btn btn-primary" id="btnStart">▶ Comenzar repaso</button>
+      <button class="btn btn-ghost" id="btnReset">↺ Reiniciar progreso</button>
+    </div>
+  </div>
+
+  <div class="progress-wrap" role="region" aria-label="Tu progreso">
+    <div class="progress-row">
+      <span>Progreso general</span>
+      <span id="progressText">0%</span>
+    </div>
+    <div class="bar" aria-label="Barra de progreso">
+      <span id="progressFill"></span>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px">
+      Nivel actual: <strong id="levelText" style="color:var(--accent)">Principiante</strong> ·
+      Insignias: <strong id="badgeCount">0</strong>/6
+    </p>
+  </div>
+
+  <h2 style="margin-top:30px">Insignias disponibles</h2>
+  <div class="badges" id="badgesList"></div>
+</section>
+
+<!-- ==================== CONCEPTOS ==================== -->
+<section id="conceptos" aria-labelledby="conceptos-title">
+  <h1 id="conceptos-title">📚 Conceptos clave</h1>
+  <p class="lead">Explora cada tarjeta. Al abrir una y leerla, ganas +5 puntos.</p>
+  <div class="grid concepts" id="conceptGrid"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" data-goto="inicio">← Inicio</button>
+    <button class="btn btn-primary" data-goto="quepasa">Siguiente: ¿Qué pasa si...? →</button>
+  </div>
+</section>
+
+<!-- ==================== WHAT IF ==================== -->
+<section id="quepasa" aria-labelledby="quepasa-title">
+  <h1 id="quepasa-title">🔎 ¿Qué pasa si...?</h1>
+  <p class="lead">Detecta errores de programación y aprende a razonar como un desarrollador.</p>
+  <div id="scenarios"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" data-goto="conceptos">← Conceptos</button>
+    <button class="btn btn-primary" data-goto="retos">Siguiente: Retos →</button>
+  </div>
+</section>
+
+<!-- ==================== RETOS ==================== -->
+<section id="retos" aria-labelledby="retos-title">
+  <h1 id="retos-title">🎯 Retos interactivos</h1>
+  <p class="lead">10 ejercicios variados. Responde todos para ganar la insignia <strong>Constructor</strong>.</p>
+  <div class="challenge-head">
+    <span class="qnum" id="challengeProgress">Reto 1 de 10</span>
+    <span class="level-pill" id="challengeLevel">Principiante</span>
+  </div>
+  <div class="quiz" id="challengeBox"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" data-goto="quepasa">← ¿Qué pasa si...?</button>
+    <button class="btn btn-primary" data-goto="simulador">Siguiente: Simulador →</button>
+  </div>
+</section>
+
+<!-- ==================== SIMULATOR ==================== -->
+<section id="simulador" aria-labelledby="sim-title">
+  <h1 id="sim-title">🧪 Simulador de código</h1>
+  <p class="lead">Analiza estos fragmentos de código. Modifica valores y observa el resultado en vivo.</p>
+  <div id="simList"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" data-goto="retos">← Retos</button>
+    <button class="btn btn-primary" data-goto="desafio">Ir al Desafío Final →</button>
+  </div>
+</section>
+
+<!-- ==================== CHALLENGE ==================== -->
+<section id="desafio" aria-labelledby="desafio-title">
+  <h1 id="desafio-title">🏆 Desafío final</h1>
+  <p class="lead">15 preguntas que combinan todos los temas. Al finalizar verás tu dominio por tema.</p>
+  <div class="challenge-head">
+    <span class="qnum" id="finalProgress">Pregunta 1 de 15</span>
+    <span class="level-pill" id="finalLevel">Avanzado</span>
+  </div>
+  <div class="quiz" id="finalBox"></div>
+</section>
+
+<!-- ==================== RESULTS ==================== -->
+<section id="resultados" aria-labelledby="res-title">
+  <h1 id="res-title">📊 Resultados y recomendaciones</h1>
+  <div class="result-card">
+    <p style="color:var(--muted)">Puntuación total</p>
+    <div class="score-big" id="finalScore">0</div>
+    <p style="margin-top:6px;color:var(--muted)" id="scoreSub">Completa retos y desafíos para subir tu puntuación.</p>
+  </div>
+  <h2 style="margin-top:26px">Dominio por tema</h2>
+  <div class="topic-list" id="topicList"></div>
+  <h2 style="margin-top:26px">Insignias ganadas</h2>
+  <div class="badges" id="badgesListResult"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" data-goto="inicio">← Inicio</button>
+    <button class="btn btn-primary" id="btnRetry">🔁 Reintentar Desafío</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* =========================================================
+   DATOS
+   ========================================================= */
+
+const CONCEPTOS = [
+  {
+    title:"Interfaz y Modo Diseño",
+    icon:"🎨",
+    body:`
+      <p>App Lab tiene dos vistas: <strong>Diseño</strong> (para construir la interfaz visual) y <strong>Código</strong> (para programar el comportamiento).</p>
+      <p>En modo Diseño arrastras elementos (botones, etiquetas, entradas) a la pantalla. Cada elemento recibe un <code class="inline">id</code> único.</p>
+    `
+  },
+  {
+    title:"Elementos de una app",
+    icon:"🧩",
+    body:`
+      <p><strong>Botones</strong>: acciones del usuario. <strong>Etiquetas</strong> (textLabel): muestran texto.</p>
+      <p><strong>Entradas</strong> (textInput): reciben datos. <strong>Imágenes</strong> y <strong>sonidos</strong>: contenido multimedia.</p>
+      <p><strong>Pantallas</strong>: cada "página" de la aplicación.</p>
+    `
+  },
+  {
+    title:"Identificadores (id)",
+    icon:"🔑",
+    body:`
+      <p>El <code class="inline">id</code> es el nombre único de cada elemento. Sirve para referenciarlo desde el código.</p>
+      <p>Usa nombres descriptivos como <code class="inline">btnCalcular</code> o <code class="inline">inputNum1</code>. Evita nombres como "boton1" cuando el proyecto crece.</p>
+    `
+  },
+  {
+    title:"setProperty()",
+    icon:"⚙️",
+    body:`
+      <p>Cambia una propiedad de un elemento: color, texto, imagen, tamaño, visibilidad, etc.</p>
+      <pre>setProperty("titulo", "text", "Hola");
+setProperty("fondo", "background-color", "blue");</pre>
+    `
+  },
+  {
+    title:"onEvent() y click",
+    icon:"👆",
+    body:`
+      <p>Permite reaccionar a acciones del usuario. El evento más común es <code class="inline">"click"</code>.</p>
+      <pre>onEvent("btnSaludar", "click", function(){
+  console.log("¡Hola!");
+});</pre>
+      <p>⚠️ Nunca anides un <code class="inline">onEvent</code> dentro de otro.</p>
+    `
+  },
+  {
+    title:"setScreen() — cambiar de pantalla",
+    icon:"📱",
+    body:`
+      <p>Salta a otra pantalla de la aplicación. El parámetro es el <strong>id de la pantalla destino</strong>.</p>
+      <pre>onEvent("btnIr", "click", function(){
+  setScreen("screen_menu");
+});</pre>
+    `
+  },
+  {
+    title:"getText() y getNumber()",
+    icon:"📥",
+    body:`
+      <p><code class="inline">getText(id)</code> devuelve lo escrito en un campo como <strong>texto</strong>.</p>
+      <p><code class="inline">getNumber(id)</code> lo devuelve como <strong>número</strong>, listo para sumar o calcular.</p>
+      <pre>var n = getNumber("inputNum");</pre>
+    `
+  },
+  {
+    title:"Variables",
+    icon:"📦",
+    body:`
+      <p>Almacenan información que puede cambiar. Se declaran con <code class="inline">var</code>.</p>
+      <pre>var nombre = "Ana";
+var edad = 17;
+var total = edad + 3; // 20</pre>
+      <p>Una variable y un objeto pueden tener el mismo nombre porque son cosas distintas.</p>
+    `
+  },
+  {
+    title:"Operaciones matemáticas",
+    icon:"➗",
+    body:`
+      <p>Suma <code class="inline">+</code>, resta <code class="inline">-</code>, multiplicación <code class="inline">*</code>, división <code class="inline">/</code>, potencia <code class="inline">Math.pow(b,e)</code>, raíz <code class="inline">Math.sqrt()</code>.</p>
+      <pre>var area = (base * altura) / 2;
+var hipo = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));</pre>
+    `
+  },
+  {
+    title:"Comentarios",
+    icon:"💬",
+    body:`
+      <p>Son descripciones del código. El motor los ignora al ejecutar.</p>
+      <pre>// Esto es un comentario de una línea
+/* Esto es un comentario
+   de varias líneas */</pre>
+    `
+  },
+  {
+    title:"App Lab y JavaScript",
+    icon:"🌐",
+    body:`
+      <p>App Lab está construido sobre <strong>JavaScript</strong>, uno de los lenguajes más usados en la web.</p>
+      <p>Puedes usar tanto bloques visuales como escribir código JavaScript directamente.</p>
+    `
+  },
+  {
+    title:"Entrada y salida de datos",
+    icon:"🔄",
+    body:`
+      <p><strong>Entrada</strong>: texto desde el usuario con <code class="inline">getText</code>/<code class="inline">getNumber</code>.</p>
+      <p><strong>Salida</strong>: mostrar resultados con <code class="inline">setText</code>, <code class="inline">setNumber</code> o <code class="inline">console.log</code>.</p>
+    `
+  }
+];
+
+const ESCENARIOS = [
+  {
+    tag:"ID confuso",
+    code:`onEvent("btnIr","click",function(){
+  setScreen("btnIr");
+});`,
+    pregunta:"El estudiante presiona el botón pero la pantalla no cambia. ¿Cuál es el error?",
+    opciones:[
+      "El evento debe ser 'change' en lugar de 'click'",
+      "setScreen debe recibir el id de la pantalla destino, no el del botón",
+      "Falta usar getProperty",
+      "onEvent no funciona con botones"
+    ],
+    correcta:1,
+    explicacion:"setScreen necesita el id de la <strong>pantalla de destino</strong> (por ejemplo 'screen_menu'), no el id del botón. Por eso no pasa nada al pulsar."
+  },
+  {
+    tag:"Suma que concatena",
+    code:`var a = getText("input1"); // "5"
+var b = getText("input2"); // "3"
+var suma = a + b;
+setText("resultado", suma);`,
+    pregunta:"El usuario ingresa 5 y 3. ¿Qué aparece en 'resultado'?",
+    opciones:[
+      "8",
+      "53",
+      "5 + 3",
+      "Error"
+    ],
+    correcta:1,
+    explicacion:"<strong>getText()</strong> devuelve texto, así que el operador <code class='inline'>+</code> los concatena (los une) en lugar de sumarlos. Hay que usar <strong>getNumber()</strong>."
+  },
+  {
+    tag:"Sumar sin números",
+    code:`var x = getNumber("n1");
+var y = getNumber("n2");
+var total = x + y;
+setText("salida", total);`,
+    pregunta:"n1 contiene -6 y n2 contiene -3. ¿Qué muestra la salida?",
+    opciones:[
+      "Error: debe ser setNumber",
+      "La suma es: 3",
+      "La suma es: -3",
+      "La suma es: -9"
+    ],
+    correcta:3,
+    explicacion:"(-6) + (-3) = <strong>-9</strong>. getNumber convierte correctamente el contenido a número, permitiendo la suma aritmética."
+  },
+  {
+    tag:"Evento mal configurado",
+    code:`onEvent("boton","click",function(){
+  onEvent("boton","click",function(){
+    setProperty("mensaje","text","¡Hola!");
+  });
+});`,
+    pregunta:"¿Cuál es el problema principal de este código?",
+    opciones:[
+      "setProperty está mal escrito",
+      "Hay un onEvent anidado dentro de otro; debe evitarse",
+      "El id 'boton' no existe",
+      "No hay problema"
+    ],
+    correcta:1,
+    explicacion:"Los eventos <strong>no deben anidarse</strong>. Cada onEvent va por fuera, uno por cada elemento/evento."
+  },
+  {
+    tag:"ID poco descriptivo",
+    code:`onEvent("b1","click",function(){
+  setScreen("s2");
+});`,
+    pregunta:"Este código funciona, pero ¿por qué es una mala práctica usar 'b1' y 's2'?",
+    opciones:[
+      "App Lab no acepta IDs cortos",
+      "Dificulta mantener y entender el código cuando crece",
+      "Los IDs deben tener números al final",
+      "No hay problema con esto"
+    ],
+    correcta:1,
+    explicacion:"IDs como <code class='inline'>btnInicio</code> o <code class='inline'>screenMenu</code> hacen el código más legible y fácil de mantener."
+  }
+];
+
+const RETOS = [
+  {
+    tipo:"multiple",
+    pregunta:"¿Qué bloque se usa para cambiar el color de fondo de una pantalla?",
+    opciones:[
+      "setProperty con la propiedad 'background-color'",
+      "onEvent con la propiedad 'color'",
+      "getNumber con el color deseado",
+      "setScreen con el color como parámetro"
+    ],
+    correcta:0, tema:"Propiedades",
+    explicacion:"setProperty permite modificar cualquier propiedad, incluido background-color."
+  },
+  {
+    tipo:"multiple",
+    pregunta:"Para sumar dos números ingresados en entradas de texto, ¿qué función debes usar?",
+    opciones:[
+      "getText()",
+      "getNumber()",
+      "getImageURL()",
+      "getChecked()"
+    ],
+    correcta:1, tema:"Entrada/Salida",
+    explicacion:"getNumber convierte el texto ingresado a número, evitando la concatenación."
+  },
+  {
+    tipo:"vf",
+    pregunta:"Un comentario en el código se ejecuta igual que cualquier otra instrucción.",
+    correcta:false, tema:"Comentarios",
+    explicacion:"Los comentarios son ignorados por el motor y sirven solo para documentar el código."
+  },
+  {
+    tipo:"vf",
+    pregunta:"App Lab utiliza JavaScript como lenguaje de programación base.",
+    correcta:true, tema:"JavaScript",
+    explicacion:"App Lab permite programar tanto con bloques como con JavaScript real."
+  },
+  {
+    tipo:"multiple",
+    pregunta:"¿Qué fórmula calcula el área de un círculo de radio r?",
+    opciones:[
+      "2 * r",
+      "r * r",
+      "Math.PI * Math.pow(r, 2)",
+      "Math.sqrt(r)"
+    ],
+    correcta:2, tema:"Matemáticas",
+    explicacion:"Área = π · r², que en JavaScript se escribe Math.PI * Math.pow(r,2)."
+  },
+  {
+    tipo:"ordenar",
+    pregunta:"Ordena los pasos para crear una app que sume dos números:",
+    items:[
+      "Crear dos entradas de texto (textInput) para los números",
+      "Crear un botón 'Calcular' y una etiqueta de resultado",
+      "Escribir onEvent para el botón con tipo 'click'",
+      "Usar getNumber para leer cada entrada",
+      "Sumar los valores y mostrarlos con setText"
+    ],
+    tema:"Aplicaciones"
+  },
+  {
+    tipo:"multiple",
+    pregunta:"Un personaje de juego debe moverse a la derecha al presionar una tecla. La mejor estrategia es:",
+    opciones:[
+      "Configurar su posición inicial a la derecha",
+      "Usar onEvent para detectar la tecla y aumentar su posición horizontal",
+      "Crear una función que lo mueva cada segundo",
+      "Usar un bucle for que siempre lo mueva"
+    ],
+    correcta:1, tema:"Eventos",
+    explicacion:"Los eventos reaccionan al usuario. onEvent detecta la tecla y actualiza la posición solo cuando ocurre."
+  },
+  {
+    tipo:"multiple",
+    pregunta:"¿Qué bloque de código eleva 6 a la potencia 3?",
+    opciones:[
+      "6 * 3",
+      "Math.pow(6, 3)",
+      "Math.sqrt(6)",
+      "6 ^ 3"
+    ],
+    correcta:1, tema:"Matemáticas",
+    explicacion:"Math.pow(base, exponente) calcula potencias en JavaScript."
+  },
+  {
+    tipo:"relacionar",
+    pregunta:"Relaciona cada función con su propósito:",
+    pares:[
+      ["setProperty","Cambia una propiedad de un elemento"],
+      ["onEvent","Reacciona a acciones del usuario"],
+      ["getText","Lee texto de una entrada"],
+      ["setScreen","Cambia a otra pantalla"],
+      ["playSound","Reproduce un sonido"]
+    ],
+    tema:"Funciones"
+  },
+  {
+    tipo:"completar",
+    pregunta:"Completa el código para saltar a la pantalla 'menu' al pulsar 'btnIr':",
+    antes:`onEvent("btnIr","click",function(){\n   `,
+    despues:`\n});`,
+    respuesta:"setScreen(\"menu\")",
+    alternativas:["setScreen('menu')","setScreen(\"menu\")"],
+    tema:"Pantallas"
+  }
+];
+
+const SIMULADORES = [
+  {
+    titulo:"Suma de dos números",
+    descripcion:"Modifica los valores de 'a' y 'b' y observa el resultado. Prueba a cambiar '+' por '*' para multiplicar.",
+    codigo:`var a = 5;\nvar b = 3;\nvar resultado = a + b;\nprint("El resultado es: " + resultado);`,
+    inputs:[
+      {nombre:"a", valor:5, tipo:"number"},
+      {nombre:"b", valor:3, tipo:"number"}
+    ]
+  },
+  {
+    titulo:"Área y perímetro de un triángulo rectángulo",
+    descripcion:"Calcula el área, la hipotenusa y el perímetro con base y altura dadas.",
+    codigo:`var B = 4;\nvar A = 3;\nvar area = (B * A) / 2;\nvar hipotenusa = Math.sqrt(Math.pow(B,2) + Math.pow(A,2));\nvar perimetro = B + A + hipotenusa;\nprint("Área: " + area);\nprint("Hipotenusa: " + hipotenusa);\nprint("Perímetro: " + perimetro);`,
+    inputs:[
+      {nombre:"B", valor:4, tipo:"number"},
+      {nombre:"A", valor:3, tipo:"number"}
+    ]
+  },
+  {
+    titulo:"Potencia de un número",
+    descripcion:"Eleva 'base' al exponente 'exp'. ¿Qué pasa si el exponente es 0?",
+    codigo:`var base = 6;\nvar exp = 3;\nvar potencia = Math.pow(base, exp);\nprint(base + " elevado a " + exp + " = " + potencia);`,
+    inputs:[
+      {nombre:"base", valor:6, tipo:"number"},
+      {nombre:"exp", valor:3, tipo:"number"}
+    ]
+  },
+  {
+    titulo:"Concatenar vs. sumar",
+    descripcion:"Observa cómo cambia el resultado al usar getText (texto) o getNumber (número). Cambia el valor de 'usarNumero'.",
+    codigo:`var texto1 = "5";\nvar texto2 = "3";\nvar usarNumero = false;\nvar resultado;\nif (usarNumero) {\n  resultado = Number(texto1) + Number(texto2);\n} else {\n  resultado = texto1 + texto2;\n}\nprint("Resultado: " + resultado);`,
+    inputs:[
+      {nombre:"usarNumero", valor:false, tipo:"boolean"}
+    ]
+  }
+];
+
+const DESAFIO = [
+  {pregunta:"¿Qué propiedad cambia el tamaño del texto de una etiqueta en Modo Diseño?",
+    opciones:["'Texto'","'id'","'Tamaño de fuente'","'altura'"],
+    correcta:2, tema:"Propiedades"},
+  {pregunta:"¿Qué tipo de evento detecta que el usuario pulsó un botón?",
+    opciones:["change","click","function","event"],
+    correcta:1, tema:"Eventos"},
+  {pregunta:"¿Qué objeto sirve para que el usuario escriba datos?",
+    opciones:["textLabel","button","textInput","image"],
+    correcta:2, tema:"Entrada/Salida"},
+  {pregunta:"Si 'texto1' vale '10' y 'texto2' vale '5', ¿qué da texto1 + texto2?",
+    opciones:["15","105","10 5","Error"],
+    correcta:1, tema:"Entrada/Salida"},
+  {pregunta:"¿Cuál es el resultado de Math.pow(2, 5)?",
+    opciones:["7","10","25","32"],
+    correcta:3, tema:"Matemáticas"},
+  {pregunta:"Para cambiar de pantalla al pulsar un botón, ¿qué necesitas?",
+    opciones:["Un bloque createRecord","setScreen con el id de la pantalla destino","Cambiar la propiedad 'visible'","Usar onEvent con 'change'"],
+    correcta:1, tema:"Pantallas"},
+  {pregunta:"¿Cuál es el lenguaje de origen de App Lab?",
+    opciones:["Python","C++","JavaScript","Scratch"],
+    correcta:2, tema:"JavaScript"},
+  {pregunta:"¿Pueden una variable y un objeto tener el mismo nombre?",
+    opciones:["Sí, siempre","Sí, son elementos distintos","No, nunca","Solo en mayúsculas"],
+    correcta:1, tema:"Variables"},
+  {pregunta:"En una app, la hipotenusa de un triángulo rectángulo se calcula con:",
+    opciones:["base + altura","(base * altura)/2","Math.sqrt(Math.pow(b,2) + Math.pow(a,2))","Math.pow(base, altura)"],
+    correcta:2, tema:"Matemáticas"},
+  {pregunta:"¿Qué hace setProperty('btn','text','Hola')?",
+    opciones:["Cambia el id del botón","Cambia el texto que muestra el botón","Oculta el botón","Elimina el botón"],
+    correcta:1, tema:"Propiedades"},
+  {pregunta:"Un bucle for que mueve un personaje cada vez que se ejecuta:",
+    opciones:["Es la mejor forma de controlar movimiento por teclado","Solo se ejecuta una vez","Hace que el personaje se mueva de golpe, no reactivamente al usuario","Es obligatorio usarlo"],
+    correcta:2, tema:"Eventos"},
+  {pregunta:"¿Qué bloque añade sonidos a una app?",
+    opciones:["setScreen","playSound","setText","createRecord"],
+    correcta:1, tema:"Funciones"},
+  {pregunta:"Para que un personaje se mueva al presionar una tecla, lo mejor es:",
+    opciones:["Usar onEvent para la tecla y actualizar la posición","Fijar la posición a la derecha","Usar playSound con la tecla","Cambiar su id"],
+    correcta:0, tema:"Eventos"},
+  {pregunta:"Los comentarios en el código:",
+    opciones:["Son obligatorios","Son ejecutados","Describen el código y no se ejecutan","Solo sirven en Python"],
+    correcta:2, tema:"Comentarios"},
+  {pregunta:"Al sumar getNumber('a') + getNumber('b') donde a=-6 y b=-3, el resultado es:",
+    opciones:["-9","-3","3","9"],
+    correcta:0, tema:"Matemáticas"}
+];
+
+const BADGES = [
+  {id:"explorador", nombre:"Explorador", emoji:"🧭", desc:"Abre 5 tarjetas de conceptos", condicion:(s)=>s.conceptos>=5},
+  {id:"depurador", nombre:"Depurador", emoji:"🐞", desc:"Completa los 5 escenarios", condicion:(s)=>s.escenarios>=5},
+  {id:"constructor", nombre:"Constructor", emoji:"🏗️", desc:"Completa los 10 retos", condicion:(s)=>s.retos>=10},
+  {id:"analista", nombre:"Analista", emoji:"🔬", desc:"Ejecuta 4 simuladores", condicion:(s)=>s.sims>=4},
+  {id:"maestro", nombre:"Maestro", emoji:"🎓", desc:"≥10 correctas en el Desafío", condicion:(s)=>s.desafioAciertos>=10},
+  {id:"campeon", nombre:"Campeón", emoji:"🏆", desc:"≥300 puntos totales", condicion:(s)=>s.pts>=300}
+];
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+let state = loadState();
+
+function defaultState(){
+  return {
+    pts:0,
+    conceptosAbiertos:new Set(),
+    escenariosOk:new Set(),
+    retosOk:new Set(),
+    retosIdx:0,
+    simsOk:new Set(),
+    desafioIdx:0,
+    desafioAciertos:0,
+    desafioRespuestas:{},
+    topicStats:{}
+  };
+}
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem("appLabState"));
+    if(!s) return defaultState();
+    s.conceptosAbiertos = new Set(s.conceptosAbiertos||[]);
+    s.escenariosOk = new Set(s.escenariosOk||[]);
+    s.retosOk = new Set(s.retosOk||[]);
+    s.simsOk = new Set(s.simsOk||[]);
+    return {...defaultState(), ...s};
+  }catch(e){return defaultState();}
+}
+function saveState(){
+  const serializable = {
+    ...state,
+    conceptosAbiertos:Array.from(state.conceptosAbiertos),
+    escenariosOk:Array.from(state.escenariosOk),
+    retosOk:Array.from(state.retosOk),
+    simsOk:Array.from(state.simsOk)
+  };
+  localStorage.setItem("appLabState", JSON.stringify(serializable));
+}
+function addPoints(n){
+  state.pts += n;
+  document.getElementById("pointsPill").textContent = `⭐ ${state.pts} pts`;
+  saveState();
+  updateProgress();
+  updateBadges();
+}
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+function goTo(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("#navMenu button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.nav===id);
+  });
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id==="resultados") renderResultados();
+  if(id==="retos") renderReto(state.retosIdx);
+  if(id==="desafio") renderDesafio(state.desafioIdx);
+}
+document.getElementById("navMenu").addEventListener("click",e=>{
+  const b = e.target.closest("button[data-nav]");
+  if(b) goTo(b.dataset.nav);
+});
+document.addEventListener("click",e=>{
+  const b = e.target.closest("[data-goto]");
+  if(b) goTo(b.dataset.get ? b.dataset.goto : b.dataset.goto);
+});
+
+/* =========================================================
+   PROGRESO Y BADGES
+   ========================================================= */
+function progressPercent(){
+  const total = 5 + 5 + 10 + 4 + 15;
+  const done =
+    Math.min(5, state.conceptosAbiertos.size) +
+    Math.min(5, state.escenariosOk.size) +
+    Math.min(10, state.retosOk.size) +
+    Math.min(4, state.simsOk.size) +
+    state.desafioAciertos;
+  return Math.round((done/total)*100);
+}
+function levelFromPts(pts){
+  if(pts>=300) return "Experto";
+  if(pts>=150) return "Avanzado";
+  if(pts>=60) return "Intermedio";
+  return "Principiante";
+}
+function updateProgress(){
+  const p = progressPercent();
+  document.getElementById("progressFill").style.width = p+"%";
+  document.getElementById("progressText").textContent = p+"%";
+  document.getElementById("levelText").textContent = levelFromPts(state.pts);
+  document.getElementById("challengeLevel").textContent = levelFromPts(state.pts);
+  document.getElementById("finalLevel").textContent = levelFromPts(state.pts);
+}
+function renderBadges(container){
+  container.innerHTML = "";
+  const summary = {
+    conceptos: state.conceptosAbiertos.size,
+    escenarios: state.escenariosOk.size,
+    retos: state.retosOk.size,
+    sims: state.simsOk.size,
+    desafioAciertos: state.desafioAciertos,
+    pts: state.pts
+  };
+  BADGES.forEach(b=>{
+    const won = b.condicion(summary);
+    const el = document.createElement("div");
+    el.className = "badge "+(won?"":"locked");
+    el.innerHTML = `<div class="emoji">${b.emoji}</div>
+      <div class="name">${b.nombre}</div>
+      <div class="desc">${b.desc}</div>`;
+    container.appendChild(el);
+  });
+  document.getElementById("badgeCount").textContent =
+    BADGES.filter(b=>b.condicion(summary)).length;
+}
+function updateBadges(){
+  renderBadges(document.getElementById("badgesList"));
+  const r = document.getElementById("badgesListResult");
+  if(r) renderBadges(r);
+}
+
+/* =========================================================
+   CONCEPTOS
+   ========================================================= */
+function renderConceptos(){
+  const grid = document.getElementById("conceptGrid");
+  grid.innerHTML = "";
+  CONCEPTOS.forEach((c,i)=>{
+    const el = document.createElement("details");
+    el.className = "card";
+    el.innerHTML = `
+      <summary>
+        <h3><span class="icon">${c.icon}</span> ${c.title}</h3>
+        <span class="arrow">▶</span>
+      </summary>
+      <div class="body">${c.body}</div>`;
+    el.addEventListener("toggle", ()=>{
+      if(el.open && !state.conceptosAbiertos.has(i)){
+        state.conceptosAbiertos.add(i);
+        addPoints(5);
+      }
+    });
+    grid.appendChild(el);
+  });
+}
+
+/* =========================================================
+   ESCENARIOS (¿Qué pasa si...?)
+   ========================================================= */
+function renderEscenarios(){
+  const cont = document.getElementById("scenarios");
+  cont.innerHTML = "";
+  ESCENARIOS.forEach((esc,i)=>{
+    const box = document.createElement("div");
+    box.className = "scenario";
+    box.innerHTML = `
+      <span class="tag">${esc.tag}</span>
+      <h3>Escenario ${i+1}</h3>
+      <pre>${highlight(esc.code)}</pre>
+      <div class="question">${esc.pregunta}</div>
+      <div class="options" data-idx="${i}">
+        ${esc.opciones.map((o,j)=>`
+          <button class="option" data-opt="${j}">
+            <span class="marker">${String.fromCharCode(65+j)}</span>
+            <span>${o}</span>
+          </button>`).join("")}
+      </div>
+      <div class="feedback" id="feed-sc-${i}"></div>
+    `;
+    cont.appendChild(box);
+    box.querySelectorAll(".option").forEach(btn=>{
+      btn.addEventListener("click",()=>checkEscenario(i, btn, box));
+    });
+  });
+}
+function checkEscenario(i, btn, box){
+  if(box.dataset.answered==="1") return;
+  box.dataset.answered="1";
+  const esc = ESCENARIOS[i];
+  const opt = parseInt(btn.dataset.opt);
+  const fb = document.getElementById(`feed-sc-${i}`);
+  box.querySelectorAll(".option").forEach((b,j)=>{
+    if(j===esc.correcta) b.classList.add("correct");
+    else if(b===btn) b.classList.add("wrong");
+    b.disabled = true;
+  });
+  if(opt===esc.correcta){
+    fb.className = "feedback ok show";
+    fb.innerHTML = "✅ <strong>¡Correcto!</strong> "+esc.explicacion;
+    if(!state.escenariosOk.has(i)){
+      state.escenariosOk.add(i);
+      addPoints(10);
+      celebrate();
+    }
+  }else{
+    fb.className = "feedback bad show";
+    fb.innerHTML = "❌ <strong>Incorrecto.</strong> "+esc.explicacion;
+  }
+}
+
+/* =========================================================
+   RETOS
+   ========================================================= */
+function renderReto(i){
+  const reto = RETOS[i];
+  document.getElementById("challengeProgress").textContent = `Reto ${i+1} de ${RETOS.length}`;
+  const box = document.getElementById("challengeBox");
+  box.innerHTML = "";
+
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `<div class="question">${reto.pregunta}</div>`;
+  box.appendChild(wrap);
+
+  if(reto.tipo==="multiple"){
+    const opts = document.createElement("div");
+    opts.className = "options";
+    reto.opciones.forEach((o,j)=>{
+      const b = document.createElement("button");
+      b.className = "option";
+      b.innerHTML = `<span class="marker">${String.fromCharCode(65+j)}</span><span>${o}</span>`;
+      b.onclick = ()=>evalRetoMultiple(i,j,b,opts);
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+  }
+  else if(reto.tipo==="vf"){
+    const opts = document.createElement("div");
+    opts.className = "options";
+    ["Verdadero","Falso"].forEach((t,j)=>{
+      const b = document.createElement("button");
+      b.className = "option";
+      b.innerHTML = `<span class="marker">${j===0?"V":"F"}</span><span>${t}</span>`;
+      b.onclick = ()=>evalRetoVF(i,j,b,opts);
+      opts.appendChild(b);
+    });
+    box.appendChild(opts);
+  }
+  else if(reto.tipo==="ordenar"){
+    const shuffled = reto.items.map((t,idx)=>({t,idx})).sort(()=>Math.random()-0.5);
+    const list = document.createElement("div");
+    list.style.cssText="display:flex;flex-direction:column;gap:8px";
+    shuffled.forEach((it)=>{
+      const el = document.createElement("div");
+      el.draggable = true;
+      el.dataset.idx = it.idx;
+      el.style.cssText="background:var(--bg-2);border:1px solid var(--border);padding:10px 12px;border-radius:8px;cursor:grab";
+      el.textContent = it.t;
+      el.addEventListener("dragstart",e=>{e.dataTransfer.setData("text",it.idx);});
+      el.addEventListener("dragover",e=>e.preventDefault());
+      el.addEventListener("drop",e=>{
+        e.preventDefault();
+        const fromIdx = e.dataTransfer.getData("text");
+        const fromEl = list.querySelector(`[data-idx="${fromIdx}"]`);
+        if(fromEl && fromEl !== el) list.insertBefore(fromEl, el);
+      });
+      list.appendChild(el);
+    });
+    box.appendChild(list);
+    const btn = document.createElement("button");
+    btn.className = "btn btn-accent";
+    btn.style.marginTop="12px";
+    btn.textContent = "Comprobar orden";
+    btn.onclick = ()=>evalRetoOrdenar(i, list);
+    box.appendChild(btn);
+  }
+  else if(reto.tipo==="relacionar"){
+    const colA = document.createElement("div");
+    const colB = document.createElement("div");
+    colA.style.cssText="display:flex;flex-direction:column;gap:8px";
+    colB.style.cssText="display:flex;flex-direction:column;gap:8px";
+    const grid = document.createElement("div");
+    grid.style.cssText="display:grid;grid-template-columns:1fr 1fr;gap:14px";
+    const leftItems = reto.pares.map(p=>p[0]).sort(()=>Math.random()-0.5);
+    const rightItems = reto.pares.map(p=>p[1]).sort(()=>Math.random()-0.5);
+    const matches = {};
+    let selected = null;
+    leftItems.forEach(t=>{
+      const el = document.createElement("button");
+      el.className = "option";
+      el.innerHTML = `<code class="inline">${t}</code>`;
+      el.onclick = ()=>{
+        if(matches[t]) return;
+        if(selected){selected.style.background="";selected=null;}
+        selected = el;
+        el.style.background = "rgba(124,92,255,.2)";
+      };
+      colA.appendChild(el);
+    });
+    rightItems.forEach(t=>{
+      const el = document.createElement("button");
+      el.className = "option";
+      el.textContent = t;
+      el.onclick = ()=>{
+        if(!selected) return;
+        const key = selected.querySelector("code").textContent;
+        matches[key] = t;
+        selected.style.background = "rgba(61,220,151,.15)";
+        el.style.background = "rgba(61,220,151,.15)";
+        selected = null;
+      };
+      colB.appendChild(el);
+    });
+    grid.appendChild(colA);grid.appendChild(colB);
+    box.appendChild(grid);
+    const btn = document.createElement("button");
+    btn.className = "btn btn-accent";
+    btn.style.marginTop="12px";
+    btn.textContent = "Comprobar relaciones";
+    btn.onclick = ()=>evalRetoRelacionar(i, matches);
+    box.appendChild(btn);
+  }
+  else if(reto.tipo==="completar"){
+    const pre = document.createElement("pre");
+    pre.innerHTML = highlight(reto.antes + "______" + reto.despues);
+    box.appendChild(pre);
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.className = "sim-input";
+    inp.placeholder = "Escribe la línea faltante...";
+    box.appendChild(inp);
+    const btn = document.createElement("button");
+    btn.className = "btn btn-accent";
+    btn.style.marginTop="12px";
+    btn.textContent = "Comprobar";
+    btn.onclick = ()=>evalRetoCompletar(i, inp.value);
+    box.appendChild(btn);
+  }
+
+  const fb = document.createElement("div");
+  fb.className = "feedback";
+  fb.id = "feed-reto";
+  box.appendChild(fb);
+
+  const nav = document.createElement("div");
+  nav.className = "nav-buttons";
+  const prev = document.createElement("button");
+  prev.className = "btn btn-ghost";
+  prev.textContent = "← Anterior";
+  prev.disabled = i===0;
+  prev.onclick = ()=>{if(i>0){state.retosIdx=i-1;renderReto(i-1);}};
+  const next = document.createElement("button");
+  next.className = "btn btn-primary";
+  next.textContent = i===RETOS.length-1 ? "Finalizar retos →" : "Siguiente →";
+  next.onclick = ()=>{
+    if(i<RETOS.length-1){state.retosIdx=i+1;renderReto(i+1);}
+    else goTo("simulador");
+  };
+  nav.appendChild(prev);nav.appendChild(next);
+  box.appendChild(nav);
+}
+function showRetoFeedback(ok, reto){
+  const fb = document.getElementById("feed-reto");
+  if(ok){
+    fb.className="feedback ok show";
+    fb.innerHTML="✅ <strong>¡Correcto!</strong> "+reto.explicacion;
+  }else{
+    fb.className="feedback bad show";
+    fb.innerHTML="❌ <strong>Incorrecto.</strong> "+reto.explicacion;
+  }
+  trackTopic(reto.tema, ok);
+}
+function evalRetoMultiple(i,j,btn,opts){
+  const reto = RETOS[i];
+  if(opts.dataset.done) return;
+  opts.dataset.done="1";
+  opts.querySelectorAll(".option").forEach((b,k)=>{
+    if(k===reto.correcta) b.classList.add("correct");
+    else if(b===btn) b.classList.add("wrong");
+    b.disabled=true;
+  });
+  const ok = j===reto.correcta;
+  showRetoFeedback(ok, reto);
+  if(ok && !state.retosOk.has(i)){state.retosOk.add(i);addPoints(10);celebrate();}
+}
+function evalRetoVF(i,j,btn,opts){
+  const reto = RETOS[i];
+  if(opts.dataset.done) return;
+  opts.dataset.done="1";
+  const correcto = (j===0 && reto.correcta===true) || (j===1 && reto.correcta===false);
+  opts.querySelectorAll(".option").forEach((b,k)=>{
+    const esCorrecta = (k===0 && reto.correcta===true) || (k===1 && reto.correcta===false);
+    if(esCorrecta) b.classList.add("correct");
+    else if(b===btn) b.classList.add("wrong");
+    b.disabled=true;
+  });
+  showRetoFeedback(correcto, reto);
+  if(correcto && !state.retosOk.has(i)){state.retosOk.add(i);addPoints(10);celebrate();}
+}
+function evalRetoOrdenar(i, list){
+  const reto = RETOS[i];
+  const order = Array.from(list.children).map(el=>parseInt(el.dataset.idx));
+  const ok = order.every((v,k)=>v===k);
+  showRetoFeedback(ok, reto);
+  if(ok && !state.retosOk.has(i)){state.retosOk.add(i);addPoints(15);celebrate();}
+  list.querySelectorAll("div").forEach(d=>d.draggable=false);
+}
+function evalRetoRelacionar(i, matches){
+  const reto = RETOS[i];
+  let correct = 0;
+  reto.pares.forEach(([a,b])=>{if(matches[a]===b) correct++;});
+  const ok = correct===reto.pares.length;
+  showRetoFeedback(ok, reto);
+  if(ok && !state.retosOk.has(i)){state.retosOk.add(i);addPoints(15);celebrate();}
+}
+function evalRetoCompletar(i, val){
+  const reto = RETOS[i];
+  const ok = reto.alternativas.some(a=>a.replace(/\s+/g,"").toLowerCase() === val.replace(/\s+/g,"").toLowerCase());
+  showRetoFeedback(ok, reto);
+  if(ok && !state.retosOk.has(i)){state.retosOk.add(i);addPoints(15);celebrate();}
+}
+
+/* =========================================================
+   SIMULADORES
+   ========================================================= */
+function renderSims(){
+  const cont = document.getElementById("simList");
+  cont.innerHTML = "";
+  SIMULADORES.forEach((s,i)=>{
+    const box = document.createElement("div");
+    box.className = "card";
+    box.style.marginTop="14px";
+    box.innerHTML = `
+      <h3>🧪 ${s.titulo}</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:10px">${s.descripcion}</p>
+      <div class="sim-grid">
+        <div class="sim-code">
+          <strong>Código</strong>
+          <pre id="sim-code-${i}" style="margin-top:8px">${highlight(s.codigo)}</pre>
+          <div class="sim-controls">
+            ${s.inputs.map(inp=>`
+              <label style="font-size:12px;color:var(--muted)">
+                ${inp.nombre}:
+                <input class="sim-input" data-sim="${i}" data-var="${inp.nombre}" data-type="${inp.tipo}"
+                  type="${inp.tipo==="boolean"?"checkbox":inp.tipo}"
+                  ${inp.tipo==="boolean"?(inp.valor?"checked":""):""}
+                  ${inp.tipo!=="boolean"?`value="${inp.valor}"`:""}
+                  style="width:120px;margin-left:6px">
+              </label>`).join("")}
+          </div>
+          <button class="btn btn-accent" style="margin-top:10px" data-run="${i}">▶ Ejecutar</button>
+        </div>
+        <div class="sim-out">
+          <strong>Salida</strong>
+          <div id="sim-out-${i}" style="margin-top:8px;font-family:monospace"></div>
+        </div>
+      </div>
+    `;
+    cont.appendChild(box);
+    box.querySelector(`[data-run="${i}"]`).onclick = ()=>runSim(i);
+    setTimeout(()=>runSim(i), 100);
+  });
+}
+function runSim(i){
+  const sim = SIMULADORES[i];
+  const inputs = document.querySelectorAll(`[data-sim="${i}"]`);
+  const vars = {};
+  inputs.forEach(inp=>{
+    if(inp.dataset.type==="boolean") vars[inp.dataset.var] = inp.checked;
+    else if(inp.dataset.type==="number") vars[inp.dataset.var] = Number(inp.value);
+    else vars[inp.dataset.var] = inp.value;
+  });
+
+  let code = sim.codigo;
+  Object.keys(vars).forEach(k=>{
+    const v = vars[k];
+    let replacement;
+    if(typeof v==="string") replacement = `"${v.replace(/"/g,'\\"')}"`;
+    else if(typeof v==="boolean") replacement = v?"true":"false";
+    else replacement = String(v);
+    const regex = new RegExp(`(var\\s+${k}\\s*=\\s*)([^;]+);`, "g");
+    code = code.replace(regex, `$1${replacement};`);
+  });
+
+  const out = document.getElementById(`sim-out-${i}`);
+  out.innerHTML = "";
+  const print = (t)=>{
+    const line = document.createElement("div");
+    line.className="line";
+    line.textContent = "> "+t;
+    out.appendChild(line);
+  };
+  try{
+    const fn = new Function("print","Math","Number","String",code);
+    fn(print, Math, Number, String);
+    if(!state.simsOk.has(i)){state.simsOk.add(i);addPoints(5);}
+  }catch(e){
+    out.innerHTML = `<div class="line" style="color:var(--danger)">❌ Error: ${e.message}</div>`;
+  }
+}
+
+/* =========================================================
+   DESAFÍO FINAL
+   ========================================================= */
+function renderDesafio(i){
+  if(i>=DESAFIO.length){
+    goTo("resultados");
+    return;
+  }
+  const q = DESAFIO[i];
+  document.getElementById("finalProgress").textContent = `Pregunta ${i+1} de ${DESAFIO.length}`;
+  const box = document.getElementById("finalBox");
+  box.innerHTML = `
+    <div class="question">${q.pregunta}</div>
+    <div class="options">
+      ${q.opciones.map((o,j)=>`
+        <button class="option" data-opt="${j}">
+          <span class="marker">${String.fromCharCode(65+j)}</span>
+          <span>${o}</span>
+        </button>`).join("")}
+    </div>
+    <div class="feedback" id="feed-final"></div>
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" ${i===0?"disabled":""} id="btnFinalPrev">← Anterior</button>
+      <button class="btn btn-primary" id="btnFinalNext">${i===DESAFIO.length-1?"Ver resultados →":"Siguiente →"}</button>
+    </div>
+  `;
+  if(state.desafioRespuestas[i]!==undefined){
+    const j = state.desafioRespuestas[i];
+    const opts = box.querySelectorAll(".option");
+    opts.forEach((b,k)=>{
+      if(k===q.correcta) b.classList.add("correct");
+      else if(k===j) b.classList.add("wrong");
+      b.disabled = true;
+    });
+    const fb = document.getElementById("feed-final");
+    const ok = j===q.correcta;
+    fb.className = "feedback show "+(ok?"ok":"bad");
+    fb.innerHTML = (ok?"✅ <strong>¡Correcto!</strong>":"❌ <strong>Incorrecto.</strong>")+" Tema: "+q.tema;
+  }
+  box.querySelectorAll(".option").forEach(btn=>{
+    btn.addEventListener("click",()=>evalFinal(i, parseInt(btn.dataset.opt), box));
+  });
+  document.getElementById("btnFinalPrev").onclick = ()=>{
+    if(i>0){state.desafioIdx=i-1;renderDesafio(i-1);}
+  };
+  document.getElementById("btnFinalNext").onclick = ()=>{
+    if(i<DESAFIO.length-1){state.desafioIdx=i+1;renderDesafio(i+1);}
+    else goTo("resultados");
+  };
+}
+function evalFinal(i, j, box){
+  const q = DESAFIO[i];
+  if(state.desafioRespuestas[i]!==undefined) return;
+  state.desafioRespuestas[i] = j;
+  const opts = box.querySelectorAll(".option");
+  opts.forEach((b,k)=>{
+    if(k===q.correcta) b.classList.add("correct");
+    else if(k===j) b.classList.add("wrong");
+    b.disabled = true;
+  });
+  const fb = document.getElementById("feed-final");
+  const ok = j===q.correcta;
+  fb.className = "feedback show "+(ok?"ok":"bad");
+  fb.innerHTML = (ok?"✅ <strong>¡Correcto!</strong>":"❌ <strong>Incorrecto.</strong>")+" Tema: "+q.tema;
+  trackTopic(q.tema, ok);
+  state.desafioAciertos = Object.entries(state.desafioRespuestas).filter(([k,v])=>DESAFIO[k].correcta===v).length;
+  if(ok){addPoints(10);celebrate();}
+  saveState();
+}
+
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
+function trackTopic(tema, ok){
+  if(!state.topicStats[tema]) state.topicStats[tema] = {ok:0, total:0};
+  state.topicStats[tema].total++;
+  if(ok) state.topicStats[tema].ok++;
+  saveState();
+}
+function renderResultados(){
+  document.getElementById("finalScore").textContent = state.pts;
+  const answered = Object.keys(state.desafioRespuestas).length;
+  const sub = answered===DESAFIO.length
+    ? `Respondiste todas las preguntas del desafío. ${state.desafioAciertos}/${DESAFIO.length} correctas.`
+    : `Has contestado ${answered} de ${DESAFIO.length} preguntas del desafío.`;
+  document.getElementById("scoreSub").textContent = sub;
+
+  const list = document.getElementById("topicList");
+  list.innerHTML = "";
+  const temas = Object.keys(state.topicStats);
+  if(temas.length===0){
+    list.innerHTML = `<p style="color:var(--muted)">Aún no has intentado retos o preguntas. ¡Empieza a practicar!</p>`;
+  }else{
+    temas.forEach(t=>{
+      const s = state.topicStats[t];
+      const ratio = s.ok/s.total;
+      const status = ratio>=0.7 ? "ok" : "review";
+      const label = ratio>=0.7 ? "Dominado" : "Repasar";
+      const el = document.createElement("div");
+      el.className="topic";
+      el.innerHTML = `
+        <div><strong>${t}</strong><br><span style="color:var(--muted);font-size:12px">${s.ok}/${s.total} correctas (${Math.round(ratio*100)}%)</span></div>
+        <span class="status ${status}">${label}</span>`;
+      list.appendChild(el);
+    });
+  }
+  renderBadges(document.getElementById("badgesListResult"));
+}
+
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+function highlight(code){
+  return code
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+}
+function celebrate(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = document.createElement("div");
+  c.className="confetti";
+  const colors = ["#7c5cff","#3ddc97","#ffb454","#5b8dff","#ff8cc6"];
+  for(let i=0;i<30;i++){
+    const p = document.createElement("div");
+    p.className="confetti-piece";
+    p.style.left = Math.random()*100+"vw";
+    p.style.top = "-20px";
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*0.5+"s";
+    p.style.animationDuration = (1.5+Math.random()*1.5)+"s";
+    c.appendChild(p);
+  }
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),3000);
+}
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+document.getElementById("btnStart").onclick = ()=>goTo("conceptos");
+document.getElementById("btnReset").onclick = ()=>{
+  if(confirm("¿Seguro que quieres reiniciar todo tu progreso?")){
+    localStorage.removeItem("appLabState");
+    state = defaultState();
+    renderAll();
+  }
+};
+document.getElementById("btnRetry").onclick = ()=>{
+  if(confirm("¿Reintentar el Desafío? Se borrarán tus respuestas anteriores.")){
+    state.desafioIdx = 0;
+    state.desafioAciertos = 0;
+    state.desafioRespuestas = {};
+    saveState();
+    goTo("desafio");
+  }
+};
+
+function renderAll(){
+  renderConceptos();
+  renderEscenarios();
+  renderReto(state.retosIdx);
+  renderSims();
+  renderDesafio(state.desafioIdx);
+  updateProgress();
+  updateBadges();
+  document.getElementById("pointsPill").textContent = `⭐ ${state.pts} pts`;
+}
+renderAll();
+</script>
+</body>
+</html>
